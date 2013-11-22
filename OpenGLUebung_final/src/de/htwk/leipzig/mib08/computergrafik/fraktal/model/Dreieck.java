@@ -2,14 +2,13 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 import java.util.ArrayList;
 
 import javax.media.opengl.GL;
-
-import java.lang.Math;
+import javax.media.opengl.GL2;
 
 public class Dreieck {
 
-	private Punkte a;
-	private Punkte b;
-	private Punkte c;
+	private final Punkte a;
+	private final Punkte b;
+	private final Punkte c;
 	private float red;
 	private float green;
 	private float blue;
@@ -40,12 +39,12 @@ public class Dreieck {
 			return c;
 		}
 		
-		public void paintDreieck(GL gl) {
+		public void paintDreieck(GL2 gl) {
 			if(mode==0){
 				gl.glBegin(GL.GL_LINE_LOOP);
 			}
 			if(mode==1){
-				gl.glBegin(GL.GL_POLYGON);
+				gl.glBegin(GL.GL_POLYGON_OFFSET_FILL);
 			}
 			if(mode==2){
 				gl.glBegin(GL.GL_LINE_LOOP);
@@ -57,7 +56,7 @@ public class Dreieck {
 			    	
 			    	gl.glEnd();
 			    
-			    	gl.glBegin(GL.GL_POLYGON);
+			    	gl.glBegin(GL.GL_POLYGON_OFFSET_FILL);
 		
 	
 			}

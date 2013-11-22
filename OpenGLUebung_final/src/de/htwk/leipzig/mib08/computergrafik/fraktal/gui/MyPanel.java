@@ -1,13 +1,13 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
 import java.util.List;
 
-import javax.media.opengl.*;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
-
-import com.sun.opengl.util.GLUT;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Punkte;
@@ -59,12 +59,12 @@ public class MyPanel extends GLJPanel {
 	
 		    
 		  if(flagX)   
-			  gl.glRotatef(20.0f, 1.0f, 0.0f, 0.0f);    // Rotation um die x-Achse
+			  gl.getGL2().glRotatef(20.0f, 1.0f, 0.0f, 0.0f);    // Rotation um die x-Achse
 		  
 		  flagX = false;
 
 		  if(flagY) 			  
-			  gl.glRotatef(20.0f, 0.0f, 1.0f, 0.0f);    // Rotation um die y-Achse
+			  gl.getGL2().glRotatef(20.0f, 0.0f, 1.0f, 0.0f);    // Rotation um die y-Achse
 				 
 		  flagY = false;
 		  
@@ -79,16 +79,16 @@ public class MyPanel extends GLJPanel {
 //			  zoomIn = false;
 			  float h = (float)HEIGHT / (float)WIDTH;
 	           
-			    gl.glMatrixMode(GL.GL_PROJECTION);
+			    gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
 			 
 			    //System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
 			    //System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
 			    //System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
-			    gl.glLoadIdentity();
-			    gl.glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 600.0f);
-			    gl.glMatrixMode(GL.GL_MODELVIEW);
-			    gl.glLoadIdentity();
-			    gl.glTranslatef(0.0f, 0.0f, -100.0f);
+			    gl.getGL2().glLoadIdentity();
+			    gl.getGL2().glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 600.0f);
+			    gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+			    gl.getGL2().glLoadIdentity();
+			    gl.getGL2().glTranslatef(0.0f, 0.0f, -100.0f);
 		  }
 		  
 		  if(zoomOut) {
@@ -114,26 +114,32 @@ public class MyPanel extends GLJPanel {
 		     // float l_position[] = {100.0f, 100.0f, 200.0f, 1.0f};
 			 // gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, l_position, 0);  
 			  
-		      gl.glEnable(GL.GL_LIGHTING);
-		      gl.glEnable(GL.GL_LIGHT0);
-		      gl.glEnable(GL.GL_COLOR_MATERIAL);
-		      gl.glEnable(GL.GL_DEPTH_TEST);
-		      gl.glEnable(GL.GL_NORMALIZE);
-		      gl.glEnable(GL.GL_POLYGON_SMOOTH);
-		      gl.glEnable( GL.GL_POINT_SMOOTH );
-		      gl.glEnable( GL.GL_LINE_SMOOTH );
+		      gl.getGL2().glEnable(GL2.GL_LIGHTING);
+		      gl.getGL2().glEnable(GL2.GL_LIGHT0);
+		      gl.getGL2().glEnable(GL2.GL_COLOR_MATERIAL);
+		      gl.getGL2().glEnable(GL.GL_DEPTH_TEST);
+		      gl.getGL2().glEnable(GL2.GL_NORMALIZE);
+		      gl.getGL2().glEnable(GL2.GL_POLYGON_SMOOTH);
+		      gl.getGL2().glEnable(GL2.GL_POINT_SMOOTH );
+		      gl.getGL2().glEnable(GL.GL_LINE_SMOOTH );
 
 
-		  	  gl.glClearColor(1.0f,1.0f,1.0f,1.0f);                   
-		      gl.glMatrixMode(GL.GL_PROJECTION);
-		      gl.glOrtho(-100, 100, -100, 100, -100, 100);	  
-		      gl.glMatrixMode(GL.GL_MODELVIEW);
+		  	  gl.getGL2().glClearColor(1.0f,1.0f,1.0f,1.0f);                   
+		      gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+		      gl.getGL2().glOrtho(-100, 100, -100, 100, -100, 100);	  
+		      gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
 
 		}
 
 		
 		public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
 				int arg4) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		public void dispose(GLAutoDrawable arg0) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -150,7 +156,7 @@ public class MyPanel extends GLJPanel {
 					gibColor(berg.getA().getZ(), 
 							berg.getB().getZ(), 
 							berg.getC().getZ()), 0.0f);
-		berg.paintDreieck(gl);
+		berg.paintDreieck(gl.getGL2());
 		    	
 		// Komplexitaet der Rekursion reduziert
 		rekPaint(berg, lauf-2);
@@ -161,7 +167,7 @@ public class MyPanel extends GLJPanel {
 						berg.getB().getZ(), 
 						berg.getC().getZ()), 
 						0.0f);
-		berg.paintDreieck(gl);
+		berg.paintDreieck(gl.getGL2());
 		    
 		// Komplexitaet reduziert
 		rekPaint(berg, lauf-2);
@@ -172,7 +178,7 @@ public class MyPanel extends GLJPanel {
 						berg.getB().getZ(), 
 						berg.getC().getZ()), 
 						0.0f);
-		berg.paintDreieck(gl);
+		berg.paintDreieck(gl.getGL2());
 		    
 		// Komplexitaet reduziert
 		rekPaint(berg, lauf-2);
@@ -183,7 +189,7 @@ public class MyPanel extends GLJPanel {
 						berg.getB().getZ(), 
 						berg.getC().getZ()), 
 						0.0f);
-		berg.paintDreieck(gl);
+		berg.paintDreieck(gl.getGL2());
 		    	
 		// Komplexiateat reduziert
 		rekPaint(berg, lauf-2);
