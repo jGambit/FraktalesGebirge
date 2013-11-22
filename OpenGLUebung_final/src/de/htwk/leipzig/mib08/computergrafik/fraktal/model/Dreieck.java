@@ -1,6 +1,8 @@
+package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 import java.util.ArrayList;
 
 import javax.media.opengl.GL;
+
 import java.lang.Math;
 
 public class Dreieck {

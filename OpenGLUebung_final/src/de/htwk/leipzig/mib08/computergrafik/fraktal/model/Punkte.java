@@ -1,3 +1,4 @@
+package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 
 public class Punkte {
 

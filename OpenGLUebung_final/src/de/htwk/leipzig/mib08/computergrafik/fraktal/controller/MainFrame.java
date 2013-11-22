@@ -1,3 +1,4 @@
+package de.htwk.leipzig.mib08.computergrafik.fraktal.controller;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -6,8 +7,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import javax.swing.*;
-import javax.media.opengl.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
+import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.MyPanel;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 
 /**
  * @author Daniel und Enno
@@ -47,29 +59,6 @@ public class MainFrame extends JFrame {
 		JTextArea hoeheTextArea = new JTextArea();
 		JButton hoeheButton = new JButton();
 	
-
-public static void main(String[] args) {
-	try{
-		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-	}
-	catch (UnsupportedLookAndFeelException ex) {
-        ex.printStackTrace();
-    } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-    } catch (InstantiationException ex) {
-        ex.printStackTrace();
-    } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
-    }
-	MainFrame app = new MainFrame();
-	app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	app.setSize(900, 900);
-	app.setResizable(false);
-	app.setTitle("MainFrame");
-	app.setLocation(100, 100);
-            
-}
-
 public MainFrame() {
 	
 
@@ -254,6 +243,7 @@ public MainFrame() {
 	});
 	
 	this.addMouseListener(new MouseAdapter() {
+		@Override
 		public void mousePressed(MouseEvent arg0) {
 			
 			if(SwingUtilities.isLeftMouseButton(arg0)){
@@ -269,6 +259,7 @@ public MainFrame() {
 
 	});
 	this.addMouseWheelListener(new MouseAdapter() {
+		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			if (e.getWheelRotation() < 0) {
 				// zoom in

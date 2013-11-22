@@ -1,10 +1,16 @@
+package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.util.List;
+
 import javax.media.opengl.*;
 import javax.media.opengl.glu.GLU;
 
 import com.sun.opengl.util.GLUT;
+
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Punkte;
 
 
 public class MyPanel extends GLJPanel {
