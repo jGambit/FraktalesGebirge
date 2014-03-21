@@ -38,7 +38,7 @@ public class MainViewControllerTest {
 	public void testMenu() {
 		mainFrame.gp = myPanel;
 		
-		mainFrame.Neu.doClick();
+		mainFrame.menuItemNeu.doClick();
 		
 		verify(myPanel).display();
 	}
