@@ -2,8 +2,8 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 
 public class Punkte {
 
-	private float x;
-	private float y;
+	private final float x;
+	private final float y;
 	private float z;
 	
 	public Punkte(float x, float y, float z){
@@ -13,9 +13,9 @@ public class Punkte {
 	}
 	
 	public Punkte(int x, int y, int z){
-		this.x = new Float(x);
-		this.y = new Float(y);
-		this.z = new Float(z);
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 	
 	public float getX(){

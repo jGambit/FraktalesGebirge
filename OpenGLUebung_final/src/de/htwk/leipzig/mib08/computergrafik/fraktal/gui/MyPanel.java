@@ -28,12 +28,12 @@ public class MyPanel extends GLJPanel {
 	Dreieck berg;
 	List<Dreieck> gebirge;
 	GLAutoDrawable arg0;
-	public static boolean flagX = false;
-	public static boolean flagY = false;
-	public static boolean zoomIn = false;
-	public static boolean zoomOut = false;
+	public boolean flagX = false;
+	public boolean flagY = false;
+	public boolean zoomIn = false;
+	public boolean zoomOut = false;
 	
-	public static int rekTiefe = 3;
+	public int rekTiefe = 3;
 	
 	public MyPanel(){
 		
@@ -54,7 +54,7 @@ public class MyPanel extends GLJPanel {
 		    				new Punkte(0, 80, 0),
 		    				new Punkte(80, -80, 0));
 		    //  berg.paintDreieck(gl);
-		    // gl.glLoadIdentity(); // zurücksetzen
+		    // gl.glLoadIdentity(); // zurï¿½cksetzen
 		    rekPaint(berg, rekTiefe);
 	
 		    
@@ -100,13 +100,6 @@ public class MyPanel extends GLJPanel {
 			
 		}
 
-		
-		public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		
 		public void init(GLAutoDrawable arg0) {
 
 
@@ -146,6 +139,7 @@ public class MyPanel extends GLJPanel {
 		});
 
 	}
+	
 	public void rekPaint(Dreieck neu, int lauf) {
 
 		if(lauf<1) return;	
@@ -198,8 +192,8 @@ public class MyPanel extends GLJPanel {
 	}
 	
 	float gibColor(float a, float b, float c) {
-		Double rc = new Double((a + b +c) / 3.0f);
-		return new Float(Math.abs( (rc / 60.0f ) )); 
+		float rc = (a + b + c) / 3.0f;
+		return Math.abs(rc / 60.0f); 
 	}
 }
 

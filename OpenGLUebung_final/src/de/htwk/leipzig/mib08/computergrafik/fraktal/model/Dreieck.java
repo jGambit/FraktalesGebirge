@@ -13,7 +13,7 @@ public class Dreieck {
 	private float green;
 	private float blue;
 	public static int mode = 0;
-	private static ArrayList<Punkte> Punktliste = new ArrayList<Punkte>();
+	private static ArrayList<Punkte> punktliste = new ArrayList<Punkte>();
 	public static boolean flag = false;
 	public static int hoehe = 60;
 	
@@ -212,7 +212,7 @@ public class Dreieck {
 		private static float exists(Punkte test){
 	
 			if(flag){
-				for (Punkte element : Punktliste) {		
+				for (Punkte element : punktliste) {		
 					if(test.getX() == element.getX() 
 							&& test.getY() == element.getY()){
 								return element.getZ();
@@ -220,9 +220,9 @@ public class Dreieck {
 				}
 			}
 			flag=true;
-			Punktliste.add(test);
+			punktliste.add(test);
 			// System.out.println("hier: "+hoehe);
-			return new Float((Math.random() * hoehe) );
+			return ((float) Math.random() * hoehe);
 			
 			
 		}
