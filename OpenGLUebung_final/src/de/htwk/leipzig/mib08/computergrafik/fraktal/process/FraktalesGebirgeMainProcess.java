@@ -1,32 +1,29 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.process;
 
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Dimension;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrame;
 
-public class FraktalesGebirgeMainProcess {
+public class FraktalesGebirgeMainProcess extends MainProcess {
+
+	private static final String TITLE = "Fraktales Gebirge";
+
+	private static final class LazyInstanceHolder {
+		private static final FraktalesGebirgeMainProcess instance = new FraktalesGebirgeMainProcess();
+	}
 
 	public static void main(String[] args) {
-		try{
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		}
-		catch (UnsupportedLookAndFeelException ex) {
-	        ex.printStackTrace();
-	    } catch (IllegalAccessException ex) {
-	        ex.printStackTrace();
-	    } catch (InstantiationException ex) {
-	        ex.printStackTrace();
-	    } catch (ClassNotFoundException ex) {
-	        ex.printStackTrace();
-	    }
 		MainFrame app = new MainFrame();
-		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		app.setSize(900, 900);
-		app.setResizable(false);
-		app.setTitle("MainFrame");
-		app.setLocation(100, 100);
+		Dimension size = new Dimension(900, 900);
+		getInstance().showView(app, size, TITLE);
+	}
+
+	private FraktalesGebirgeMainProcess() {
+		super();
+	}
+
+	public static FraktalesGebirgeMainProcess getInstance() {
+		return LazyInstanceHolder.instance;
 	}
 
 }

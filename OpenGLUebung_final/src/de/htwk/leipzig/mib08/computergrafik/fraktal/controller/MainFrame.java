@@ -88,7 +88,6 @@ public MainFrame() {
 	Hilfe.add(Info);
 	
 	setJMenuBar(Leiste);
-	this.setVisible(true);
 
 	cp = (JPanel) this.getContentPane();
 	cp.setLayout(new BorderLayout());
