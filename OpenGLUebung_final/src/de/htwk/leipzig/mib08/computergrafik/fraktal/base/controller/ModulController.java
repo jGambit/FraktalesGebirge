@@ -8,7 +8,7 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.ModulProcessIF;
  * @param <P> ModulProcess
  * @param <O> Configuration
  */
-public abstract class ModulController<P extends ModulProcessIF, O> {
+public abstract class ModulController<P extends ModulProcessIF, O> implements ModulControllerIF<P, O> {
 	
 	private boolean updatingForm;
 	private boolean cleared;
@@ -23,6 +23,7 @@ public abstract class ModulController<P extends ModulProcessIF, O> {
 		setUpdatingForm();
 		try {
 			clearFormImpl();
+			permitForm(false);
 			setCurrentObject(null);
 			setCleared(true);
 		} catch (ToBeHandledByApplicationException e) {
@@ -35,7 +36,11 @@ public abstract class ModulController<P extends ModulProcessIF, O> {
 	public void fillForm(O config) {
 		setUpdatingForm();
 		try {
+			if (! isCleared()) {
+				clearForm();
+			}
 			fillFormImpl(config);
+			permitForm(true);
 		} catch (ToBeHandledByApplicationException e) {
 			handleEventException(e);
 		} finally {
@@ -55,7 +60,7 @@ public abstract class ModulController<P extends ModulProcessIF, O> {
 		return cleared;
 	}
 
-	public void setCleared(boolean cleared) {
+	protected void setCleared(boolean cleared) {
 		this.cleared = cleared;
 	}
 	

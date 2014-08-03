@@ -2,10 +2,10 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.process;
 
 import javax.swing.JFrame;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.MainProcess;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrame;
 
-public class FraktalesGebirgeMainProcess extends MainProcess {
+public class FraktalesGebirgeMainProcess extends GuiModulProcess {
 
 	private static final class LazyInstanceHolder {
 		private static final FraktalesGebirgeMainProcess instance = new FraktalesGebirgeMainProcess();

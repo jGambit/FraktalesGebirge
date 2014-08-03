@@ -13,7 +13,7 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Punkte;
 
 
-public class MyPanel extends GLJPanel {
+public class OpenGlPanel extends GLJPanel {
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public class MyPanel extends GLJPanel {
 	
 	public static int rekTiefe = 3;
 	
-	public MyPanel(){
+	public OpenGlPanel(){
 		
 	glu = new GLU();
 		//backBuffer = new BufferedImage(200, 200, BufferedImage.TYPE_3BYTE_BGR);

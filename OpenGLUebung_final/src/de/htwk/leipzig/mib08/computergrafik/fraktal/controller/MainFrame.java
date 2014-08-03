@@ -20,7 +20,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.MyPanel;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.OpenGlPanel;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 
 /**
@@ -34,7 +34,7 @@ public class MainFrame extends JFrame {
 	private static final Dimension WINODW_SIZE = new Dimension(900, 900);
 	private static final Point WINDOW_LOCATION = new Point(100, 100);
 	JPanel cp;
-	MyPanel gp = new MyPanel();
+	OpenGlPanel gp = new OpenGlPanel();
 
 	JMenuBar Leiste = new JMenuBar();
 	JMenu Datei = new JMenu("Datei");
@@ -167,7 +167,7 @@ public class MainFrame extends JFrame {
 				if (rekTiefe6.isSelected())
 					rekTiefe6.setSelected(false);
 
-				MyPanel.rekTiefe = 1;
+				OpenGlPanel.rekTiefe = 1;
 				gp.display();
 			}
 		});
@@ -186,7 +186,7 @@ public class MainFrame extends JFrame {
 				if (rekTiefe6.isSelected())
 					rekTiefe6.setSelected(false);
 
-				MyPanel.rekTiefe = 3;
+				OpenGlPanel.rekTiefe = 3;
 				gp.display();
 			}
 		});
@@ -204,7 +204,7 @@ public class MainFrame extends JFrame {
 					rekTiefe5.setSelected(false);
 				if (rekTiefe6.isSelected())
 					rekTiefe6.setSelected(false);
-				MyPanel.rekTiefe = 6;
+				OpenGlPanel.rekTiefe = 6;
 				gp.display();
 
 			}
@@ -222,7 +222,7 @@ public class MainFrame extends JFrame {
 					rekTiefe5.setSelected(false);
 				if (rekTiefe6.isSelected())
 					rekTiefe6.setSelected(false);
-				MyPanel.rekTiefe = 8;
+				OpenGlPanel.rekTiefe = 8;
 
 				gp.display();
 			}
@@ -240,7 +240,7 @@ public class MainFrame extends JFrame {
 					rekTiefe1.setSelected(false);
 				if (rekTiefe6.isSelected())
 					rekTiefe6.setSelected(false);
-				MyPanel.rekTiefe = 10;
+				OpenGlPanel.rekTiefe = 10;
 				gp.display();
 			}
 		});
@@ -257,7 +257,7 @@ public class MainFrame extends JFrame {
 					rekTiefe5.setSelected(false);
 				if (rekTiefe1.isSelected())
 					rekTiefe1.setSelected(false);
-				MyPanel.rekTiefe = 13;
+				OpenGlPanel.rekTiefe = 13;
 				gp.display();
 			}
 		});

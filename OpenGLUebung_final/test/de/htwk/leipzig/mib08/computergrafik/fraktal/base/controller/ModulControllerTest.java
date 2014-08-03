@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -65,6 +66,10 @@ public class ModulControllerTest {
 		}
 		
 	}
+	
+	private class PermitFoo {
+		void bar(boolean foobar) {};
+	}
 
 	ModulController<ModulProcessIF, Foo> toTest;
 	@Mock private Foo setUpdatingMock;
@@ -72,6 +77,8 @@ public class ModulControllerTest {
 	@Mock private Foo implMock;
 	@Mock private ModulProcessIF modulProcess;
 	@Mock private Foo currentObject;
+	@Mock private Foo shouldClear;
+	@Mock private PermitFoo permitFoo;
 	private ExceptionFoo exceptionFoo;
 	
 	@Before
@@ -104,14 +111,19 @@ public class ModulControllerTest {
 			protected void clearFormImpl() {
 				implMock.bar();
 			}
+			@Override
+			public void permitForm(boolean permit) {
+				permitFoo.bar(permit);
+			}
 		};
 		toTest.setCurrentObject(currentObject);
 		
 		toTest.clearForm();
 		
-		InOrder order = inOrder(setUpdatingMock, implMock, unSetUpdatingMock);
+		InOrder order = inOrder(setUpdatingMock, implMock, permitFoo, unSetUpdatingMock);
 		order.verify(setUpdatingMock).bar();
 		order.verify(implMock).bar();
+		order.verify(permitFoo).bar(false);
 		order.verify(unSetUpdatingMock).bar();
 		assertTrue(toTest.isCleared());
 		assertNull(toTest.getCurrentObject());
@@ -139,21 +151,47 @@ public class ModulControllerTest {
 	}
 
 	@Test
-	public void testFillForm() throws Exception {
+	public void testFillFormShouldClearAndPermit() throws Exception {
 		toTest = new TestUpdatingModulController(modulProcess) {
 			@Override
 			protected void fillFormImpl(Foo config)
 					throws ToBeHandledByApplicationException {
 				implMock.bar();
 			}
+			@Override
+			public void clearForm() {
+				shouldClear.bar();
+			}
+			@Override
+			public void permitForm(boolean permit) {
+				permitFoo.bar(permit);
+			}
 		};
+		toTest.setCleared(false);
 		
 		toTest.fillForm(currentObject);
 		
-		InOrder order = inOrder(setUpdatingMock, implMock, unSetUpdatingMock);
+		InOrder order = inOrder(setUpdatingMock, shouldClear, implMock, permitFoo, unSetUpdatingMock);
 		order.verify(setUpdatingMock).bar();
+		order.verify(shouldClear).bar();
 		order.verify(implMock).bar();
+		order.verify(permitFoo).bar(true);
 		order.verify(unSetUpdatingMock).bar();
+	}
+	
+	@Test
+	public void testFillFormShouldNotClear() throws Exception {
+		toTest = new TestUpdatingModulController(modulProcess) {
+			@Override
+			public void clearForm() {
+				implMock.bar();
+			}
+		};
+		toTest.setCleared(true);
+		
+		toTest.fillForm(currentObject);
+		
+		verify(implMock, never()).bar();
 	}
 	
 	@Test
@@ -164,6 +202,9 @@ public class ModulControllerTest {
 			protected void fillFormImpl(Foo config)
 					throws ToBeHandledByApplicationException {
 				exceptionFoo.bar();
+			}
+			@Override
+			public void clearForm() {
 			}
 		};
 		
