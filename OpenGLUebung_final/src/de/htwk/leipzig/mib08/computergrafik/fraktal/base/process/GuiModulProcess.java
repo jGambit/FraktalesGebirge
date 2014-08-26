@@ -1,34 +1,24 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.process;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window;
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
-public abstract class GuiModulProcess implements ModulProcessIF {
+public abstract class GuiModulProcess extends ModulProcess implements GuiModulProcessIF {
 	
-	private static final String LOG_RESOURCE_PATH = "resource/log.txt";
-	protected final static Logger _log = Logger.getLogger(GuiModulProcess.class.getName());
+	private Component parentViewComponent;
 	
 	public GuiModulProcess() {
-		Handler handler = null;
-		try {
-			handler = new FileHandler( LOG_RESOURCE_PATH );
-		} catch (SecurityException | IOException e) {
-			startExceptionDialog(e);
-		}
-		handler.setFormatter(new SimpleFormatter());
-		_log.setLevel(Level.INFO);
-		_log.addHandler(handler);
+		super();
+		setParentViewComponent(new Container());
 	}
 	
 	@Override
@@ -52,6 +42,24 @@ public abstract class GuiModulProcess implements ModulProcessIF {
 		window.setAlwaysOnTop(modal);
 		window.setAutoRequestFocus(true);
 		window.setVisible(true);
+	}
+	
+	protected Component getParentViewComponent() {
+		return parentViewComponent;
+	}
+	
+	protected void setParentViewComponent(Component parentViewComponent) {
+		this.parentViewComponent = parentViewComponent;
+	}
+	
+	@Override
+	public synchronized void blockView() {
+		getParentViewComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	}
+	
+	@Override
+	public synchronized void unblockView() {
+		getParentViewComponent().setCursor(Cursor.getDefaultCursor());
 	}
 
 }

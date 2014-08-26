@@ -1,14 +1,14 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.ModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
 
 
 /**
  * @param <P> ModulProcess
  * @param <O> Configuration
  */
-public abstract class ModulController<P extends ModulProcessIF, O> implements ModulControllerIF<P, O> {
+public abstract class ModulController<P extends GuiModulProcessIF, O> implements ModulControllerIF<P, O> {
 	
 	private final P modulProcess;
 	private ControllerState<O> state;
@@ -20,6 +20,7 @@ public abstract class ModulController<P extends ModulProcessIF, O> implements Mo
 	@Override
 	public void clearForm() {
 		setUpdatingForm();
+		blockView();
 		try {
 			clearFormImpl();
 			permitForm(false);
@@ -28,6 +29,7 @@ public abstract class ModulController<P extends ModulProcessIF, O> implements Mo
 		} catch (ToBeHandledByApplicationException e) {
 			handleEventException(e);
 		} finally {
+			unblockView();
 			unSetUpdatingForm();
 		}
 	}
@@ -35,6 +37,7 @@ public abstract class ModulController<P extends ModulProcessIF, O> implements Mo
 	@Override
 	public void fillForm(O config) {
 		setUpdatingForm();
+		blockView();
 		try {
 			if (! isCleared()) {
 				clearForm();
@@ -44,13 +47,14 @@ public abstract class ModulController<P extends ModulProcessIF, O> implements Mo
 		} catch (ToBeHandledByApplicationException e) {
 			handleEventException(e);
 		} finally {
+			unblockView();
 			unSetUpdatingForm();
 		}
 	}
 	
 	@Override
 	public void permitForm(boolean permit) {
-		
+		permitFormImpl(permit);
 	}
 
 	@Override
@@ -98,7 +102,17 @@ public abstract class ModulController<P extends ModulProcessIF, O> implements Mo
 		getState().setCurrentObject(currentObject);
 	}
 	
+
+	protected void blockView() {
+		getModulProcess().blockView();
+	}
+
+	protected void unblockView() {
+		getModulProcess().unblockView();
+	}
+	
 	protected abstract void clearFormImpl() throws ToBeHandledByApplicationException;
 	protected abstract void fillFormImpl(O config) throws ToBeHandledByApplicationException;
+	protected abstract void permitFormImpl(boolean permit);
 
 }

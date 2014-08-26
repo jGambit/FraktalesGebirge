@@ -1,8 +1,8 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.ModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
 
-public interface ModulControllerIF<P extends ModulProcessIF, O> {
+public interface ModulControllerIF<P extends GuiModulProcessIF, O> {
 
 	/**
 	 * Leert den Controller und alle Models.

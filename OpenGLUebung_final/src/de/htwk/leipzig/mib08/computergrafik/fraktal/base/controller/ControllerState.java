@@ -1,6 +1,7 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
 
 public class ControllerState<O> {
+	
 	boolean updatingForm;
 	boolean cleared;
 	O currentObject;
@@ -29,6 +30,13 @@ public class ControllerState<O> {
 		this.currentObject = currentObject;
 	}
 
-	
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		result.append(updatingForm ? "U" : "u");
+		result.append(cleared ? "C" : "c");
+		result.append(currentObject != null ? "O" : "o");
+		return result.toString();
+	}
 	
 }

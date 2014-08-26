@@ -29,6 +29,35 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
  */
 public class MainFrame extends JFrame {
 
+	private class MainFrameMouseAdapter extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+
+			if (SwingUtilities.isLeftMouseButton(arg0)) {
+				gp.flagX = true;
+				gp.display();
+			}
+			if (SwingUtilities.isRightMouseButton(arg0)) {
+				gp.flagY = true;
+				gp.display();
+			}
+
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			if (e.getWheelRotation() < 0) {
+				// zoom in
+				gp.zoomIn = true;
+				gp.display();
+			} else {
+				// zoom out
+				gp.zoomOut = true;
+				gp.display();
+			}
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "Fraktales Gebirge";
 	private static final Dimension WINODW_SIZE = new Dimension(900, 900);
@@ -59,6 +88,7 @@ public class MainFrame extends JFrame {
 	JPanel hoehePanel = new JPanel();
 	JTextArea hoeheTextArea = new JTextArea();
 	JButton hoeheButton = new JButton();
+	private MainFrameMouseAdapter mosueListener;
 
 	public MainFrame() {
 		setSize(WINODW_SIZE);
@@ -100,6 +130,7 @@ public class MainFrame extends JFrame {
 		hoeheTextArea.setColumns(3);
 
 		Neu.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				gp.flagX = false;
 				gp.flagY = false;
@@ -110,17 +141,20 @@ public class MainFrame extends JFrame {
 		});
 
 		Beenden.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				int a;
 				a = JOptionPane.showConfirmDialog(getRootPane(),
 						"Beenden, echt jetz oder?");
-				System.out.println("a:" + a);
-				if (a == 0)
-					System.exit(0);
+				if (a == JOptionPane.YES_OPTION) {
+					setVisible(false);
+					dispose();
+				}
 			}
 		});
 
 		Dreiecke.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (Beides.isSelected())
 					Beides.setSelected(false);
@@ -132,6 +166,7 @@ public class MainFrame extends JFrame {
 		});
 
 		Pyramiden.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (Dreiecke.isSelected())
 					Dreiecke.setSelected(false);
@@ -143,6 +178,7 @@ public class MainFrame extends JFrame {
 		});
 
 		Beides.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (Dreiecke.isSelected())
 					Dreiecke.setSelected(false);
@@ -154,6 +190,7 @@ public class MainFrame extends JFrame {
 		});
 
 		rekTiefe1.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (rekTiefe2.isSelected())
@@ -173,6 +210,7 @@ public class MainFrame extends JFrame {
 		});
 
 		rekTiefe2.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (rekTiefe1.isSelected())
@@ -192,6 +230,7 @@ public class MainFrame extends JFrame {
 		});
 
 		rekTiefe3.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (rekTiefe2.isSelected())
@@ -210,6 +249,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		rekTiefe4.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (rekTiefe2.isSelected())
@@ -228,6 +268,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		rekTiefe5.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (rekTiefe2.isSelected())
@@ -245,6 +286,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		rekTiefe6.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (rekTiefe2.isSelected())
@@ -263,12 +305,14 @@ public class MainFrame extends JFrame {
 		});
 
 		Info.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				show_info();
 			}
 		});
 
 		hoeheButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Dreieck.hoehe = new Integer(hoeheTextArea.getText());
 				System.out.println(hoeheTextArea.getText());
@@ -277,38 +321,15 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		this.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
+		addMouseListener(getMouseListener());
+		addMouseWheelListener(getMouseListener());
+	}
 
-				if (SwingUtilities.isLeftMouseButton(arg0)) {
-					gp.flagX = true;
-					gp.display();
-				}
-				if (SwingUtilities.isRightMouseButton(arg0)) {
-					gp.flagY = true;
-					gp.display();
-				}
-
-			}
-
-		});
-		this.addMouseWheelListener(new MouseAdapter() {
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				if (e.getWheelRotation() < 0) {
-					// zoom in
-					gp.zoomIn = true;
-					gp.display();
-				} else {
-					// zoom out
-					gp.zoomOut = true;
-					gp.display();
-				}
-
-			}
-		});
-
+	private MainFrameMouseAdapter getMouseListener() {
+		if (mosueListener == null) {
+			mosueListener = new MainFrameMouseAdapter();
+		}
+		return mosueListener;
 	}
 
 	private void show_info() {

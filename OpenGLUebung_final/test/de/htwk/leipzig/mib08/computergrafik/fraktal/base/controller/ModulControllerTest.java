@@ -19,7 +19,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.ModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.test.Foo;
 
 
@@ -27,7 +27,7 @@ public class ModulControllerTest {
 
 	private class TestUpdatingModulController extends
 			TestModulController {
-		public TestUpdatingModulController(ModulProcessIF modulProcess) {
+		public TestUpdatingModulController(GuiModulProcessIF modulProcess) {
 			super(modulProcess);
 		}
 
@@ -43,9 +43,9 @@ public class ModulControllerTest {
 	}
 
 	private class TestModulController extends
-			ModulController<ModulProcessIF, Foo> {
+			ModulController<GuiModulProcessIF, Foo> {
 
-		public TestModulController(ModulProcessIF modulProcess) {
+		public TestModulController(GuiModulProcessIF modulProcess) {
 			super(modulProcess);
 		}
 
@@ -56,6 +56,10 @@ public class ModulControllerTest {
 		@Override
 		protected void fillFormImpl(Foo config)
 				throws ToBeHandledByApplicationException {
+		}
+
+		@Override
+		protected void permitFormImpl(boolean permit) {
 		}
 	}
 	
@@ -71,11 +75,11 @@ public class ModulControllerTest {
 		void bar(boolean foobar) {};
 	}
 
-	ModulController<ModulProcessIF, Foo> toTest;
+	ModulController<GuiModulProcessIF, Foo> toTest;
 	@Mock private Foo setUpdatingMock;
 	@Mock private Foo unSetUpdatingMock;
 	@Mock private Foo implMock;
-	@Mock private ModulProcessIF modulProcess;
+	@Mock private GuiModulProcessIF modulProcess;
 	@Mock private Foo currentObject;
 	@Mock private Foo shouldClear;
 	@Mock private PermitFoo permitFoo;

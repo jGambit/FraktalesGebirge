@@ -9,11 +9,12 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 
+import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Punkte;
 
 
-public class OpenGlPanel extends GLJPanel {
+public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameController> {
 
 	/**
 	 * 
@@ -45,6 +46,7 @@ public class OpenGlPanel extends GLJPanel {
 		
 	this.addGLEventListener(new GLEventListener() {
 		
+		@Override
 		public void display(GLAutoDrawable arg0) {
 			gl = arg0.getGL();
 		    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -107,6 +109,7 @@ public class OpenGlPanel extends GLJPanel {
 		}
 
 		
+		@Override
 		public void init(GLAutoDrawable arg0) {
 
 
@@ -132,6 +135,7 @@ public class OpenGlPanel extends GLJPanel {
 		}
 
 		
+		@Override
 		public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
 				int arg4) {
 			// TODO Auto-generated method stub
@@ -139,6 +143,7 @@ public class OpenGlPanel extends GLJPanel {
 		}
 
 
+		@Override
 		public void dispose(GLAutoDrawable arg0) {
 			// TODO Auto-generated method stub
 			
@@ -200,6 +205,11 @@ public class OpenGlPanel extends GLJPanel {
 	float gibColor(float a, float b, float c) {
 		Double rc = new Double((a + b +c) / 3.0f);
 		return new Float(Math.abs( (rc / 60.0f ) )); 
+	}
+	@Override
+	public void setController(MainFrameController controller) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
