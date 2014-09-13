@@ -1,4 +1,4 @@
-package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
+package de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.ModulControllerIF;
 

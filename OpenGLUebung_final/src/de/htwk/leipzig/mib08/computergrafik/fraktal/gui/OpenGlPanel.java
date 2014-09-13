@@ -9,12 +9,13 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui.ModulBasePanelIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.OpenGlController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Punkte;
 
 
-public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameController> {
+public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<OpenGlController> {
 
 	/**
 	 * 
@@ -24,8 +25,6 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 	float y;
 	float z;
 
-	GL gl;
-	GLU glu;
 	Dreieck berg;
 	List<Dreieck> gebirge;
 	GLAutoDrawable arg0;
@@ -38,8 +37,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 	
 	public OpenGlPanel(){
 		
-	glu = new GLU();
-		//backBuffer = new BufferedImage(200, 200, BufferedImage.TYPE_3BYTE_BGR);
+	//backBuffer = new BufferedImage(200, 200, BufferedImage.TYPE_3BYTE_BGR);
 	//graphics = backBuffer.createGraphics();
 	//graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	// setSize(backBuffer.getWidth(null), backBuffer.getHeight(null));	
@@ -48,7 +46,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 		
 		@Override
 		public void display(GLAutoDrawable arg0) {
-			gl = arg0.getGL();
+			GL gl = getGL();
 		    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		    
 			
@@ -61,7 +59,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 	
 		    
 		  if(flagX)   
-			  gl.getGL2().glRotatef(20.0f, 1.0f, 0.0f, 0.0f);    // Rotation um die x-Achse
+			  getGL().getGL2().glRotatef(20.0f, 1.0f, 0.0f, 0.0f);    // Rotation um die x-Achse
 		  
 		  flagX = false;
 
@@ -78,7 +76,6 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 //			  gl.glLoadIdentity(); 
 //			  glu.gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 //			  System.out.println("zoom in");
-//			  zoomIn = false;
 			  float h = (float)HEIGHT / (float)WIDTH;
 	           
 			    gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
@@ -91,10 +88,23 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 			    gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
 			    gl.getGL2().glLoadIdentity();
 			    gl.getGL2().glTranslatef(0.0f, 0.0f, -100.0f);
+			    zoomIn = false;
 		  }
 		  
 		  if(zoomOut) {
-			  System.out.println("zoom out");
+			  float h = (float)HEIGHT / (float)WIDTH;
+			  gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+				 
+			    //System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
+			    //System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
+			    //System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
+			    gl.getGL2().glLoadIdentity();
+//			    gl.getGL2().glFrustum(-1.0f, 1.0f, h, -h, 5.0f, 600.0f);
+//			    gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+//			    gl.getGL2().glLoadIdentity();
+//			    gl.getGL2().glTranslatef(0.0f, 0.0f, +100.0f);
+			    GLU glu = GLU.createGLU(getGL());
+			    glu.gluPerspective(Math.PI * h, h, 5, 600);
 			  zoomOut = false;
 		  }
 		  
@@ -161,7 +171,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 					gibColor(berg.getA().getZ(), 
 							berg.getB().getZ(), 
 							berg.getC().getZ()), 0.0f);
-		berg.paintDreieck(gl.getGL2());
+		berg.paintDreieck(getGL().getGL2());
 		    	
 		// Komplexitaet der Rekursion reduziert
 		rekPaint(berg, lauf-2);
@@ -172,7 +182,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 						berg.getB().getZ(), 
 						berg.getC().getZ()), 
 						0.0f);
-		berg.paintDreieck(gl.getGL2());
+		berg.paintDreieck(getGL().getGL2());
 		    
 		// Komplexitaet reduziert
 		rekPaint(berg, lauf-2);
@@ -183,7 +193,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 						berg.getB().getZ(), 
 						berg.getC().getZ()), 
 						0.0f);
-		berg.paintDreieck(gl.getGL2());
+		berg.paintDreieck(getGL().getGL2());
 		    
 		// Komplexitaet reduziert
 		rekPaint(berg, lauf-2);
@@ -194,7 +204,7 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 						berg.getB().getZ(), 
 						berg.getC().getZ()), 
 						0.0f);
-		berg.paintDreieck(gl.getGL2());
+		berg.paintDreieck(getGL().getGL2());
 		    	
 		// Komplexiateat reduziert
 		rekPaint(berg, lauf-2);
@@ -206,8 +216,9 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<MainFrameC
 		Double rc = new Double((a + b +c) / 3.0f);
 		return new Float(Math.abs( (rc / 60.0f ) )); 
 	}
+	
 	@Override
-	public void setController(MainFrameController controller) {
+	public void setController(OpenGlController controller) {
 		// TODO Auto-generated method stub
 		
 	}

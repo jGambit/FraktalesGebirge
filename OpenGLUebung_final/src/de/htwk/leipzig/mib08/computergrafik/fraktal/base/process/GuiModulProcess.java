@@ -1,7 +1,6 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.process;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window;
@@ -14,11 +13,14 @@ import javax.swing.JOptionPane;
 
 public abstract class GuiModulProcess extends ModulProcess implements GuiModulProcessIF {
 	
-	private Component parentViewComponent;
+	private final Component parentViewComponent;
 	
-	public GuiModulProcess() {
+	public GuiModulProcess(Component parentViewComponent) {
 		super();
-		setParentViewComponent(new Container());
+		if (parentViewComponent == null) {
+			throw new IllegalArgumentException("The parentViewComponent must not be null!");
+		}
+		this.parentViewComponent = parentViewComponent;
 	}
 	
 	@Override
@@ -46,10 +48,6 @@ public abstract class GuiModulProcess extends ModulProcess implements GuiModulPr
 	
 	protected Component getParentViewComponent() {
 		return parentViewComponent;
-	}
-	
-	protected void setParentViewComponent(Component parentViewComponent) {
-		this.parentViewComponent = parentViewComponent;
 	}
 	
 	@Override

@@ -1,10 +1,9 @@
-package de.htwk.leipzig.mib08.computergrafik.fraktal.controller;
+package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.ModulController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
 
-public abstract class ModulViewController<P extends GuiModulProcessIF, O, C extends ModulController<P, O>> extends ModulController<P, O> {
+public abstract class ModulViewController<P extends GuiModulProcessIF, O, C extends ModulController<P, O>> extends ModulController<P, O> implements ModulViewControllerIF<P, O, C> {
 
 	private C contentController;
 
@@ -28,7 +27,8 @@ public abstract class ModulViewController<P extends GuiModulProcessIF, O, C exte
 		getContentController().permitForm(permit);
 	}
 
-	private C getContentController() {
+	@Override
+	public C getContentController() {
 		if (contentController == null) {
 			contentController = createContentControllerImpl();
 		}

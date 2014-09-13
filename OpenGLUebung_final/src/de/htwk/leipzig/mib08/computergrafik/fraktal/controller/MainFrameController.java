@@ -1,5 +1,6 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.controller;
 
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.ModulViewController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Dreieck;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
 
