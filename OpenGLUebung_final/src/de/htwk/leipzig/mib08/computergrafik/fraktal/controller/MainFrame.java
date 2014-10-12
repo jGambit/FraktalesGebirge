@@ -35,11 +35,11 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		public void mousePressed(MouseEvent arg0) {
 
 			if (SwingUtilities.isLeftMouseButton(arg0)) {
-				getSubPanel().flagX = true;
+				OpenGlPanel.flagX = true;
 				getSubPanel().display();
 			}
 			if (SwingUtilities.isRightMouseButton(arg0)) {
-				getSubPanel().flagY = true;
+				OpenGlPanel.flagY = true;
 				getSubPanel().display();
 			}
 
@@ -49,11 +49,11 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			if (e.getWheelRotation() < 0) {
 				// zoom in
-				getSubPanel().zoomIn = true;
+				OpenGlPanel.zoomIn = true;
 				getSubPanel().display();
 			} else {
 				// zoom out
-				getSubPanel().zoomOut = true;
+				OpenGlPanel.zoomOut = true;
 				getSubPanel().display();
 			}
 		}
