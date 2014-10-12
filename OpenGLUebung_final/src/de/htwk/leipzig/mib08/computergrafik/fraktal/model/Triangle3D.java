@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Triangle3D {
 	
+	private static final float FACTOR = 100.0f;
 	private final Map<TrianglePoints, Point3D> points;
 	private Triangle3D halvedMidTriangle;
 	
@@ -37,12 +38,22 @@ public class Triangle3D {
 	
 	public Triangle3D getHalvedMidTriangle() {
 		if (halvedMidTriangle == null) {
-			Point3D a = getB().createMidPoint(getC());
-			Point3D b = getC().createMidPoint(getA());
-			Point3D c = getA().createMidPoint(getB());
+			Point3D a = createMidPointWithRandomHeight(getB(), getC());
+			Point3D b = createMidPointWithRandomHeight(getC(), getA()); 
+			Point3D c = createMidPointWithRandomHeight(getA(), getB());
 			halvedMidTriangle = new Triangle3D(a, b, c);
 		}
 		return halvedMidTriangle;
+	}
+
+	private Point3D createMidPointWithRandomHeight(Point3D start, Point3D end) {
+		Point3D midPoint = start.createMidPoint(end);
+		return midPoint.translateZ(createRandomHeight());
+	}
+
+	private float createRandomHeight() {
+		double dz = FACTOR * Math.random() * getEuclideanLength();
+		return new Double(dz).floatValue();
 	}
 	
 	public Triangle3D createHalvedATriangle() {
@@ -78,10 +89,18 @@ public class Triangle3D {
 				createHalvedCTriangle()
 		};
 	}
-
+	
 	@Override
 	public String toString() {
 		return "(A, B, C) = " + points.values();
+	}
+	
+	float getEuclideanLength() {
+		float AB = getA().getEuclideanDistance(getB());
+		float BC = getB().getEuclideanDistance(getC());
+		float CA = getC().getEuclideanDistance(getA());
+		double result = Math.sqrt(AB * AB + BC * BC * CA * CA);
+		return Double.valueOf(result).floatValue();
 	}
 	
 }
