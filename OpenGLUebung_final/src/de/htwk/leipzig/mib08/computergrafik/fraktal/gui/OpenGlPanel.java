@@ -224,8 +224,3 @@ public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<OpenGlCont
 	}
 }
 
-	
-	
-	
-	
-

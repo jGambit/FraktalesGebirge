@@ -4,6 +4,7 @@ public class Point3D {
 	private static final float TWO = 2.0f;
 	private static final float ZERO = 0.0f;
 	private static final float EPSILON = 0.0005f;
+	public static final Point3D SOURCE = new Point3D(ZERO, ZERO, ZERO);
 	private final float x;
 	private final float y;
 	private final float z;
@@ -48,34 +49,6 @@ public class Point3D {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(x);
-		result = prime * result + Float.floatToIntBits(y);
-		result = prime * result + Float.floatToIntBits(z);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Point3D other = (Point3D) obj;
-		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
-			return false;
-		if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
-			return false;
-		if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
-			return false;
-		return true;
-	}
-	
-	@Override
 	public String toString() {
 		return "(x, y, z) = " + toArray();
 	}
@@ -105,6 +78,17 @@ public class Point3D {
 		
 		for (int i = 0; i < q.length; i++) {
 			result += square((q[i] - p[i]));
+		}
+		
+		return Math.sqrt(result);
+	}
+	
+	public double getLength() {
+		double result = 0.0d;
+		float[] q = toArray();
+		
+		for (int i = 0; i < q.length; i++) {
+			result += square((q[i]));
 		}
 		
 		return Math.sqrt(result);

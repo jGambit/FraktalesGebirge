@@ -52,7 +52,7 @@ public class Triangle3D {
 	}
 
 	private float createRandomHeight() {
-		double dz = FACTOR * Math.random() * getEuclideanLength();
+		double dz = FACTOR * Math.random() * getEuclideanLength() - (FACTOR / 2.0f);
 		return new Double(dz).floatValue();
 	}
 	
@@ -99,7 +99,8 @@ public class Triangle3D {
 		float AB = getA().getEuclideanDistance(getB());
 		float BC = getB().getEuclideanDistance(getC());
 		float CA = getC().getEuclideanDistance(getA());
-		double result = Math.sqrt(AB * AB + BC * BC * CA * CA);
+		Point3D p = new Point3D(AB, BC, CA);
+		double result = p.getLength();
 		return Double.valueOf(result).floatValue();
 	}
 	
