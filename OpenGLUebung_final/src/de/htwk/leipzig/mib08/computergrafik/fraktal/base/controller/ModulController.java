@@ -42,6 +42,7 @@ public abstract class ModulController<P extends GuiModulProcessIF, O> implements
 			if (! isCleared()) {
 				clearForm();
 			}
+			setCurrentObject(config);
 			fillFormImpl(config);
 			permitForm(true);
 		} catch (ToBeHandledByApplicationException e) {

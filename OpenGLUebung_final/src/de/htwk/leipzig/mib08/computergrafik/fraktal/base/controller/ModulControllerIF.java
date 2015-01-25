@@ -5,12 +5,12 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess
 public interface ModulControllerIF<P extends GuiModulProcessIF, O> {
 
 	/**
-	 * Leert den Controller und alle Models.
+	 * Leert alle Models und setzt sie auf den Ursprungszustand zurück.
 	 */
 	public void clearForm();
 
 	/**
-	 * Befüllt den Controller mit Daten aus dem gegebenen Konfigurationsobjekt.
+	 * Befüllt alle Models des Controllers mit Daten aus dem gegebenen Konfigurationsobjekt.
 	 * Dabei wird der Controller automatisch vorher mittels {@link #clearForm()} geleert. 
 	 * @param config Konfigurationsobjekt mit Daten für die Models
 	 */
