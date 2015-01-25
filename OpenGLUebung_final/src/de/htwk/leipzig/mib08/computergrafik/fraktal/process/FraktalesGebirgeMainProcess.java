@@ -3,10 +3,7 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.process;
 import java.awt.Component;
 import java.awt.Window;
 
-import javax.swing.JFrame;
-
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrame;
 
 public class FraktalesGebirgeMainProcess extends GuiModulProcess {
 
@@ -15,8 +12,16 @@ public class FraktalesGebirgeMainProcess extends GuiModulProcess {
 	}
 
 	public static void main(String[] args) {
-		JFrame app = new MainFrame();
-		getInstance().showView(app, false);
+		getInstance().getFraktalesGebirgeModulProcess().start();
+	}
+
+	private FraktalesGebirgeModulProcess modulProcess;
+
+	private FraktalesGebirgeModulProcess getFraktalesGebirgeModulProcess() {
+		if (modulProcess == null) {
+			modulProcess = new FraktalesGebirgeModulProcess(getParentViewComponent());
+		}
+		return modulProcess;
 	}
 
 	private FraktalesGebirgeMainProcess(Component parentViewComponent) {

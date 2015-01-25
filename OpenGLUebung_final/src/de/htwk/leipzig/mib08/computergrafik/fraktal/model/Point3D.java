@@ -1,5 +1,10 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 
+/**
+ * Modell für einen Punkt im R3
+ * @author Enrico Timoschenko (tarakos GmbH)
+ *
+ */
 public class Point3D {
 	private static final float TWO = 2.0f;
 	private static final float ZERO = 0.0f;
@@ -34,10 +39,10 @@ public class Point3D {
 	}
 	
 	public Point3D createMidPoint(Point3D other) {
-		float dx = (other.getX() - getX()) / TWO;
-		float dy = (other.getY() - getY()) / TWO;
-		float dz = (other.getZ() - getZ()) / TWO;
-		return translate(dx, dy, dz);
+		float dx = (other.getX() + getX()) / TWO;
+		float dy = (other.getY() + getY()) / TWO;
+		float dz = (other.getZ() + getZ()) / TWO;
+		return new Point3D(dx, dy, dz);
 	}
 	
 	public Point3D translate(float dx, float dy, float dz) {
@@ -50,7 +55,7 @@ public class Point3D {
 
 	@Override
 	public String toString() {
-		return "(x, y, z) = " + toArray();
+		return "(x, y, z) = " + "[" + getX() + ", " + getY() + ", " + getZ() + "]";
 	}
 	
 	public boolean isInLinearRange(Point3D other) {

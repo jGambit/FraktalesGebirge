@@ -5,9 +5,14 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Modell für ein Dreieck im R3
+ * @author Enrico Timoschenko (tarakos GmbH)
+ *
+ */
 public class Triangle3D {
 	
-	private static final float FACTOR = 100.0f;
+	private static final float FACTOR = 0.5f;
 	private final Map<TrianglePoints, Point3D> points;
 	private Triangle3D halvedMidTriangle;
 	
@@ -52,7 +57,7 @@ public class Triangle3D {
 	}
 
 	private float createRandomHeight() {
-		double dz = FACTOR * Math.random() * getEuclideanLength() - (FACTOR / 2.0f);
+		double dz = FACTOR * Math.random() * getEuclideanLength();
 		return new Double(dz).floatValue();
 	}
 	
@@ -102,6 +107,10 @@ public class Triangle3D {
 		Point3D p = new Point3D(AB, BC, CA);
 		double result = p.getLength();
 		return Double.valueOf(result).floatValue();
+	}
+
+	public float getLength() {
+		return getEuclideanLength();
 	}
 	
 }

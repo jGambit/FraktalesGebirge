@@ -1,4 +1,4 @@
-package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
+package de.htwk.leipzig.mib08.computergrafik.fraktal.model.legacy;
 import java.util.ArrayList;
 
 import javax.media.opengl.GL;
