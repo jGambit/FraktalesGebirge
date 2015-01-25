@@ -1,17 +1,19 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javax.swing.JButton;
+import javax.swing.Box;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTextArea;
+import javax.swing.JSlider;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui.ModulViewPanelIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
@@ -32,7 +34,6 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	private final JMenuBar menuLeiste = new JMenuBar();
 	private final JMenu menuDatei = new JMenu("Datei");
 	private final JMenu menuModus = new JMenu("Modus");
-	private final JMenu menuRekursionstiefe = new JMenu("Rekursionstiefe");
 	private final JMenu menuHilfe = new JMenu("Hilfe");
 
 	private final JMenuItem menuItemNeu = new JMenuItem("Neu");
@@ -40,16 +41,12 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	private final JRadioButtonMenuItem menuItemDreiecke = new JRadioButtonMenuItem("Linien");
 	private final JRadioButtonMenuItem menuItemPyramiden = new JRadioButtonMenuItem("Flächen");
 	private final JRadioButtonMenuItem menuItemBeides = new JRadioButtonMenuItem("Linien und Flächen");
-	private final JRadioButtonMenuItem menuItemRekTiefe1 = new JRadioButtonMenuItem("1");
-	private final JRadioButtonMenuItem menuItemRekTiefe2 = new JRadioButtonMenuItem("2");
-	private final JRadioButtonMenuItem menuItemRekTiefe3 = new JRadioButtonMenuItem("3");
-	private final JRadioButtonMenuItem menuItemRekTiefe4 = new JRadioButtonMenuItem("4");
-	private final JRadioButtonMenuItem menuItemRekTiefe5 = new JRadioButtonMenuItem("5");
-	private final JRadioButtonMenuItem menuItemRekTiefe6 = new JRadioButtonMenuItem("MAX");
 	private final JMenuItem menuItemInfo = new JMenuItem("Info");
 	private final JPanel panelHeader = new JPanel();
-	private final JTextArea textAreaHoehe = new JTextArea();
-	private final JButton buttonHoehe = new JButton();
+	private Component labelHeight;
+	private JSlider sliderHeight;
+	private JLabel labelDetail;
+	private JSlider sliderDetail;
 
 	public MainFrame() {
 		super();
@@ -59,7 +56,6 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 
 		getMenuLeiste().add(getMenuDatei());
 		getMenuLeiste().add(getMenuModus());
-		getMenuLeiste().add(getMenuRekursionstiefe());
 		getMenuLeiste().add(getMenuHilfe());
 
 		getMenuDatei().add(getMenuItemNeu());
@@ -69,14 +65,6 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		getMenuModus().add(getMenuItemPyramiden());
 		getMenuModus().add(getMenuItemBeides());
 
-		getMenuRekursionstiefe().add(getMenuItemRekTiefe1());
-		getMenuRekursionstiefe().add(getMenuItemRekTiefe2());
-		getMenuRekursionstiefe().add(getMenuItemRekTiefe3());
-		getMenuRekursionstiefe().add(getMenuItemRekTiefe4());
-		getMenuRekursionstiefe().add(getMenuItemRekTiefe5());
-		getMenuRekursionstiefe().add(getMenuItemRekTiefe6());
-
-		getMenuItemRekTiefe2().setSelected(true);
 		getMenuItemDreiecke().setSelected(true);
 
 		getMenuHilfe().add(getMenuItemInfo());
@@ -87,33 +75,70 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		getContetnPanel().setLayout(new BorderLayout());
 		getContetnPanel().add(getSubPanel(), BorderLayout.CENTER);
 		getContetnPanel().add(getHeaderPanel(), BorderLayout.NORTH);
-		getHeaderPanel().add(getTextAreaHoehe());
-		getHeaderPanel().add(getButtonHoehe());
-		getTextAreaHoehe().setColumns(3);
+		Box line1 = Box.createHorizontalBox();
+		line1.add(getLabelHeight());
+		line1.add(getSliderHeight());
+		Box line2 = Box.createHorizontalBox();
+		line2.add(getLabelDetail());
+		line2.add(getSliderDetail());
+		Box lines = Box.createVerticalBox();
+		lines.add(line1);
+		lines.add(line2);
+		getHeaderPanel().add(lines);
 	}
 	
+	JSlider getSliderDetail() {
+		if (sliderDetail == null) {
+			sliderDetail = new JSlider();
+			sliderDetail.setMajorTickSpacing(5);
+			sliderDetail.setMinorTickSpacing(1);
+			sliderDetail.setPaintTicks(true);
+			sliderDetail.setPaintLabels(true);
+			sliderDetail.setToolTipText("Adjust the level of rekursion-detail.");
+		}
+		return sliderDetail;
+	}
+
+	private JLabel getLabelDetail() {
+		if (labelDetail == null) {
+			labelDetail = new JLabel("Rekursion detail: ");
+		}
+		return labelDetail;
+	}
+
+	JSlider getSliderHeight() {
+		if (sliderHeight == null) {
+			sliderHeight = new JSlider();
+			sliderHeight.setMajorTickSpacing(25);
+			sliderHeight.setMinorTickSpacing(5);
+			sliderHeight.setPaintTicks(true);
+			sliderHeight.setPaintLabels(true);
+			sliderHeight.setToolTipText("Adjust the height of the mountain.");
+		}
+		return sliderHeight;
+	}
+
+	private Component getLabelHeight() {
+		if (labelHeight == null) {
+			labelHeight = new JLabel("Height: ");
+		}
+		return labelHeight;
+	}
+
 	@Override
 	public void setController(MainFrameController controller) {
 		getSubPanel().setController(controller.getContentController());
 		addMouseListener(controller.getMouseListener());
 		addMouseWheelListener(controller.getMouseListener());
-		getMenuItemRekTiefe1().setModel(controller.getRekTiefeEinsModel());
-		getMenuItemRekTiefe2().setModel(controller.getRekTiefeZweiModel());
-		getMenuItemRekTiefe3().setModel(controller.getRekTiefeDreiModel());
-		getMenuItemRekTiefe4().setModel(controller.getRekTiefeVierModel());
-		getMenuItemRekTiefe5().setModel(controller.getRekTiefeFuenfModel());
-		getMenuItemRekTiefe6().setModel(controller.getRekTiefeSechsModel());
 		getMenuItemInfo().setModel(controller.getInfoButtonModel());
 		getMenuItemNeu().setModel(controller.getNeuButtonModel());
 		getMenuItemBeenden().setModel(controller.getBeendenButtonModel());
+		getSliderHeight().setModel(controller.getHeightSLiderModel());
+		getSliderDetail().setModel(controller.getDetailSliderModel());
 	}
 
 	JMenu getMenuHilfe() {
 		return menuHilfe;
-	}
-
-	JMenu getMenuRekursionstiefe() {
-		return menuRekursionstiefe;
 	}
 
 	JMenu getMenuModus() {
@@ -157,44 +182,12 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		return menuItemBeides;
 	}
 
-	JRadioButtonMenuItem getMenuItemRekTiefe1() {
-		return menuItemRekTiefe1;
-	}
-
-	JRadioButtonMenuItem getMenuItemRekTiefe2() {
-		return menuItemRekTiefe2;
-	}
-
-	JRadioButtonMenuItem getMenuItemRekTiefe3() {
-		return menuItemRekTiefe3;
-	}
-
-	JRadioButtonMenuItem getMenuItemRekTiefe4() {
-		return menuItemRekTiefe4;
-	}
-
-	JRadioButtonMenuItem getMenuItemRekTiefe5() {
-		return menuItemRekTiefe5;
-	}
-
-	JRadioButtonMenuItem getMenuItemRekTiefe6() {
-		return menuItemRekTiefe6;
-	}
-
 	JMenuItem getMenuItemInfo() {
 		return menuItemInfo;
 	}
 
 	JPanel getHeaderPanel() {
 		return panelHeader;
-	}
-
-	JButton getButtonHoehe() {
-		return buttonHoehe;
-	}
-
-	JTextArea getTextAreaHoehe() {
-		return textAreaHoehe;
 	}
 
 }

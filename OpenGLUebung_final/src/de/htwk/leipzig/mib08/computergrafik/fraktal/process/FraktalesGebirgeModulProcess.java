@@ -96,5 +96,14 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 			getView().dispose();
 		}
 	}
-	
+
+	public void updateHeight(Triangle3D currentObject, int value) {
+		float factor = value * 0.005f;
+		Point3D a = currentObject.getA();
+		Point3D b = currentObject.getB();
+		Point3D c = currentObject.getC();
+		Triangle3D gebirge = new Triangle3D(a, b, c, factor);
+		getMainFrameController().fillForm(gebirge);
+	}
+
 }

@@ -12,8 +12,8 @@ import java.util.Map;
  */
 public class Triangle3D {
 	
-	private static final float FACTOR = 0.5f;
 	private final Map<TrianglePoints, Point3D> points;
+	private float heightFactor;
 	private Triangle3D halvedMidTriangle;
 	
 	private enum TrianglePoints {
@@ -23,10 +23,15 @@ public class Triangle3D {
 	}
 	
 	public Triangle3D(Point3D a, Point3D b, Point3D c) {
+		this(a, b, c, 0.1f);
+	}
+	
+	public Triangle3D(Point3D a, Point3D b, Point3D c, float heightFactor) {
 		points = new EnumMap<>(TrianglePoints.class);
 		points.put(TrianglePoints.A, a);
 		points.put(TrianglePoints.B, b);
 		points.put(TrianglePoints.C, c);
+		setHeightFactor(heightFactor);
 	}
 	
 	public Point3D getA() {
@@ -57,7 +62,7 @@ public class Triangle3D {
 	}
 
 	private float createRandomHeight() {
-		double dz = FACTOR * Math.random() * getEuclideanLength();
+		double dz = getHeightFactor() * Math.random() * getEuclideanLength();
 		return new Double(dz).floatValue();
 	}
 	
@@ -111,6 +116,14 @@ public class Triangle3D {
 
 	public float getLength() {
 		return getEuclideanLength();
+	}
+
+	public float getHeightFactor() {
+		return heightFactor;
+	}
+
+	public void setHeightFactor(float heightFactor) {
+		this.heightFactor = heightFactor;
 	}
 	
 }

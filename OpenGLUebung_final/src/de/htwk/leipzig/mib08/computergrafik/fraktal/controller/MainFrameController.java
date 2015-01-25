@@ -6,27 +6,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
+import javax.swing.BoundedRangeModel;
 import javax.swing.ButtonModel;
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.DefaultButtonModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.ModulViewController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.OpenGlPanel;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
 
-public class MainFrameController extends ModulViewController<FraktalesGebirgeModulProcess, Triangle3D, OpenGlController> implements ActionListener {
+public class MainFrameController extends ModulViewController<FraktalesGebirgeModulProcess, Triangle3D, OpenGlController> implements ActionListener, ChangeListener {
 
 	private ClickAndZoomMouseAdapter mosueListener;
-	private ButtonModel buttonModelRekTiefe1;
-	private ButtonModel buttonModelRekTiefe3;
-	private ButtonModel buttonModelRekTiefeZwei;
-	private ButtonModel buttonModelRekVier;
-	private ButtonModel buttonModelRekFuenf;
-	private ButtonModel buttonModelRekSechs;
 	private ButtonModel buttonModelInfo;
 	private ButtonModel buttonModelNeu;
 	private ButtonModel buttonModelBeenden;
+	private BoundedRangeModel sliderModelHeight;
+	private BoundedRangeModel sliderModelDetail;
 	
 	private class ClickAndZoomMouseAdapter extends MouseAdapter {
 		@Override
@@ -73,22 +73,6 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 		return mosueListener;
 	}
 
-	public ButtonModel getRekTiefeEinsModel() {
-		if (buttonModelRekTiefe1 == null) {
-			buttonModelRekTiefe1 = new DefaultButtonModel();
-			buttonModelRekTiefe1.addActionListener(this);
-		}
-		return buttonModelRekTiefe1;
-	}
-	
-	public ButtonModel getRekTiefeDreiModel() {
-		if (buttonModelRekTiefe3 == null) {
-			buttonModelRekTiefe3 = new DefaultButtonModel();
-			buttonModelRekTiefe3.addActionListener(this);
-		}
-		return buttonModelRekTiefe3;
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (isUpdatingForm()) {
@@ -99,62 +83,17 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 		setUpdatingForm();
 		blockView();
 		try {
-			if (source == getRekTiefeEinsModel()) {
-				getContentController().setRekTiefe(1);
-			} else if (source == getRekTiefeDreiModel()) {
-				getContentController().setRekTiefe(3);
-			} else if (source == getRekTiefeZweiModel()) {
-				getContentController().setRekTiefe(2);
-			} else if (source == getRekTiefeVierModel()) {
-				getContentController().setRekTiefe(4);
-			} else if (source == getRekTiefeFuenfModel()) {
-				getContentController().setRekTiefe(5);
-			} else if (source == getRekTiefeSechsModel()) {
-				getContentController().setRekTiefe(6);
-			} else if (source == getInfoButtonModel()) {
+			if (source == getInfoButtonModel()) {
 				getModulProcess().showInfoDialog();
 			} else if (source == getNeuButtonModel()) {
 				getModulProcess().start();
 			} else if (source == getBeendenButtonModel()) {
 				getModulProcess().quit();
 			}
-//			getModulProcess().repaint();
 		} finally {
 			unblockView();
 			unSetUpdatingForm();
 		}
-	}
-
-	public ButtonModel getRekTiefeZweiModel() {
-		if (buttonModelRekTiefeZwei == null) {
-			buttonModelRekTiefeZwei = new DefaultButtonModel();
-			buttonModelRekTiefeZwei.addActionListener(this);
-		}
-		return buttonModelRekTiefeZwei;
-	}
-
-	public ButtonModel getRekTiefeSechsModel() {
-		if (buttonModelRekSechs == null) {
-			buttonModelRekSechs = new DefaultButtonModel();
-			buttonModelRekSechs.addActionListener(this);
-		}
-		return buttonModelRekSechs;
-	}
-
-	public ButtonModel getRekTiefeFuenfModel() {
-		if (buttonModelRekFuenf == null) {
-			buttonModelRekFuenf = new DefaultButtonModel();
-			buttonModelRekFuenf.addActionListener(this);
-		}
-		return buttonModelRekFuenf;
-	}
-
-	public ButtonModel getRekTiefeVierModel() {
-		if (buttonModelRekVier == null) {
-			buttonModelRekVier = new DefaultButtonModel();
-			buttonModelRekVier.addActionListener(this);
-		}
-		return buttonModelRekVier;
 	}
 
 	public ButtonModel getInfoButtonModel() {
@@ -179,6 +118,48 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 			buttonModelBeenden.addActionListener(this);
 		}
 		return buttonModelBeenden;
+	}
+
+	public BoundedRangeModel getHeightSLiderModel() {
+		if (sliderModelHeight == null) {
+			sliderModelHeight = new DefaultBoundedRangeModel();
+			sliderModelHeight.addChangeListener(this);
+		}
+		return sliderModelHeight;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if (isUpdatingForm()) {
+			return;
+		}
+		
+		Object source = e.getSource();
+		setUpdatingForm();
+		blockView();
+		try {
+			if (source == getHeightSLiderModel()) {
+				getModulProcess().updateHeight(getCurrentObject(), getHeightSLiderModel().getValue());
+			} else if (source == getDetailSliderModel()) {
+				getContentController().setRekTiefe(getDetailSliderModel().getValue());
+			}
+		} finally {
+			unblockView();
+			unSetUpdatingForm();
+		}
+		
+	}
+
+	public BoundedRangeModel getDetailSliderModel() {
+		if (sliderModelDetail == null) {
+			sliderModelDetail = new DefaultBoundedRangeModel();
+			sliderModelDetail.setExtent(1);
+			sliderModelDetail.setMaximum(12);
+			sliderModelDetail.setMinimum(1);
+			sliderModelDetail.setValue(3);
+			sliderModelDetail.addChangeListener(this);
+		}
+		return sliderModelDetail;
 	}
 	
 }
