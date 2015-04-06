@@ -20,6 +20,33 @@ public class OpenGlController extends ModulController<FraktalesGebirgeModulProce
 	public OpenGlController(FraktalesGebirgeModulProcess modulProcess) {
 		super(modulProcess);
 	}
+	
+	@Override
+	public void init(GLAutoDrawable arg0) {
+		setUpdatingForm();
+		blockView();
+		System.out.println("init");
+		try {
+			setDrawable(arg0);
+
+			getGl().getGL2().glEnable(GL2.GL_LIGHTING);
+			getGl().getGL2().glEnable(GL2.GL_LIGHT0);
+			getGl().getGL2().glEnable(GL2.GL_COLOR_MATERIAL);
+			getGl().getGL2().glEnable(GL.GL_DEPTH_TEST);
+			getGl().getGL2().glEnable(GL2.GL_NORMALIZE);
+			getGl().getGL2().glEnable(GL2.GL_POLYGON_SMOOTH);
+			getGl().getGL2().glEnable(GL2.GL_POINT_SMOOTH);
+			getGl().getGL2().glEnable(GL.GL_LINE_SMOOTH);
+
+			getGl().getGL2().glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			getGl().getGL2().glMatrixMode(GL2.GL_PROJECTION);
+			getGl().getGL2().glOrtho(-100, 100, -100, 100, -100, 100);
+			getGl().getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+		} finally {
+			unblockView();
+			unSetUpdatingForm();
+		}
+	}
 
 	@Override
 	protected void clearFormImpl() throws ToBeHandledByApplicationException {
@@ -41,57 +68,37 @@ public class OpenGlController extends ModulController<FraktalesGebirgeModulProce
 	
 	@Override
 	public void display(GLAutoDrawable arg0) {
-		GL gl = arg0.getGL();
-	    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-		
-	    // gl.glLoadIdentity(); // zurücksetzen
-	    if (getCurrentObject() != null) {
-	    	getModulProcess().rekPaint(getCurrentObject(), gl.getGL2(), rekTiefe);
-	    }
-	    
-	  if(flagX)   
-		  gl.getGL2().glRotatef(20.0f, 1.0f, 0.0f, 0.0f);    // Rotation um die x-Achse
-	  
-	  flagX = false;
+		setUpdatingForm();
+		blockView();
+		try {
+			GL gl = arg0.getGL();
+		    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		    
+		    if (getCurrentObject() != null) {
+		    	getModulProcess().rekPaint(getCurrentObject(), gl.getGL2(), getRekTiefe());
+		    }
+		    
+		  if(flagX) 
+			  getModulProcess().rotateX(arg0);
+//			  gl.getGL2().glRotatef(20.0f, 1.0f, 0.0f, 0.0f);    // Rotation um die x-Achse
+		  
+		  flagX = false;
 
-	  if(flagY) 			  
-		  gl.getGL2().glRotatef(20.0f, 0.0f, 1.0f, 0.0f);    // Rotation um die y-Achse
-			 
-	  flagY = false;
+		  if(flagY) 			  
+			  getModulProcess().rotateY(arg0);
+//			  gl.getGL2().glRotatef(20.0f, 0.0f, 1.0f, 0.0f);    // Rotation um die y-Achse
+				 
+		  flagY = false;
+		} finally {
+			unblockView();
+			unSetUpdatingForm();
+		}
 	}
 	
 	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
 		System.out.println("Display changed");
 	}
-
 	
-	@Override
-	public void init(GLAutoDrawable arg0) {
-		System.out.println("init");
-		setDrawable(arg0);
-
-		getGl().getGL2().glEnable(GL2.GL_LIGHTING);
-		getGl().getGL2().glEnable(GL2.GL_LIGHT0);
-		getGl().getGL2().glEnable(GL2.GL_COLOR_MATERIAL);
-		getGl().getGL2().glEnable(GL.GL_DEPTH_TEST);
-		getGl().getGL2().glEnable(GL2.GL_NORMALIZE);
-		getGl().getGL2().glEnable(GL2.GL_POLYGON_SMOOTH);
-		getGl().getGL2().glEnable(GL2.GL_POINT_SMOOTH);
-		getGl().getGL2().glEnable(GL.GL_LINE_SMOOTH);
-
-		getGl().getGL2().glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		getGl().getGL2().glMatrixMode(GL2.GL_PROJECTION);
-		getGl().getGL2().glOrtho(-100, 100, -100, 100, -100, 100);
-		getGl().getGL2().glMatrixMode(GL2.GL_MODELVIEW);
-	}
-	
-	@Override
-	public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
-			int arg4) {
-		
-	}
-
-
 	@Override
 	public void dispose(GLAutoDrawable arg0) {
 		System.out.println("dispose");
@@ -119,6 +126,21 @@ public class OpenGlController extends ModulController<FraktalesGebirgeModulProce
 
 	public void setDrawable(GLAutoDrawable drawable) {
 		this.drawable = drawable;
+	}
+
+	public int getRekTiefe() {
+		return rekTiefe;
+	}
+	
+	@Override
+	public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
+			int arg4) {
+	}
+
+	public void reset() {
+		if (getDrawable() != null) {
+			getDrawable().getGL().getGL2().glLoadIdentity();
+		}
 	}
 	
 }

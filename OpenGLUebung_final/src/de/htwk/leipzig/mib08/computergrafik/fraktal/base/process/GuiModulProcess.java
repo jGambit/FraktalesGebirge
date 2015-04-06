@@ -1,7 +1,6 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.process;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window;
 import java.util.logging.Level;
@@ -10,22 +9,22 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface.GuiModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface.ViewStackIF;
+
 
 public abstract class GuiModulProcess extends ModulProcess implements GuiModulProcessIF {
 	
-	private final Component parentViewComponent;
+	private final ViewStackIF viewStack;
 	
-	public GuiModulProcess(Component parentViewComponent) {
+	public GuiModulProcess(ViewStackIF parentViewStack) {
 		super();
-		if (parentViewComponent == null) {
-			throw new IllegalArgumentException("The parentViewComponent must not be null!");
-		}
-		this.parentViewComponent = parentViewComponent;
+		viewStack = parentViewStack == null ? new ModulProcessViewStack() : parentViewStack;
 	}
 	
 	@Override
 	public void startExceptionDialog(Throwable th) {
-		JOptionPane.showMessageDialog(null, th.getMessage(), "Der Vorgang konnte nicht ausgeführt werden.", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(getCurrentViewComponent(), th.getMessage(), "Der Vorgang konnte nicht ausgeführt werden.", JOptionPane.ERROR_MESSAGE);
 		_log.log(Level.SEVERE, th.getMessage());
 	}
 	
@@ -46,18 +45,30 @@ public abstract class GuiModulProcess extends ModulProcess implements GuiModulPr
 		window.setVisible(true);
 	}
 	
-	protected Component getParentViewComponent() {
-		return parentViewComponent;
+	protected Component getCurrentViewComponent() {
+		return getViewStack().getCurrentView();
 	}
 	
 	@Override
-	public synchronized void blockView() {
-		getParentViewComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	public void blockView() {
+		getViewStack().blockView();
 	}
 	
 	@Override
 	public synchronized void unblockView() {
-		getParentViewComponent().setCursor(Cursor.getDefaultCursor());
+		getViewStack().unlbockView();
 	}
 
+	ViewStackIF getViewStack() {
+		return viewStack;
+	}
+	
+	public void pushView(Component toPush) {
+		getViewStack().pushView(toPush);
+	}
+	
+	public Component popView() {
+		return getViewStack().popView();
+	}
+	
 }

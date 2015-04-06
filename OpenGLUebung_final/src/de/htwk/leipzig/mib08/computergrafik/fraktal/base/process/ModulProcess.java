@@ -9,7 +9,7 @@ import java.util.logging.SimpleFormatter;
 
 public abstract class ModulProcess {
 	
-	protected static final  Logger _log = Logger.getLogger(GuiModulProcess.class.getName());
+	protected static final Logger _log = Logger.getLogger(ModulProcess.class.getName());
 	protected static final String LOG_RESOURCE_PATH = "resource/log.txt";
 	
 	public ModulProcess() {

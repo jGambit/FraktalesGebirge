@@ -31,16 +31,21 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 	private class ClickAndZoomMouseAdapter extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-
-			if (SwingUtilities.isLeftMouseButton(arg0)) {
-				getContentController().rotateX();
-				getModulProcess().repaint();
+			setUpdatingForm();
+			blockView();
+			try {
+				if (SwingUtilities.isLeftMouseButton(arg0)) {
+					getContentController().rotateX();
+					getModulProcess().repaint();
+				}
+				if (SwingUtilities.isRightMouseButton(arg0)) {
+					getContentController().rotateY();
+					getModulProcess().repaint();
+				}
+			} finally {
+				unblockView();
+				unSetUpdatingForm();
 			}
-			if (SwingUtilities.isRightMouseButton(arg0)) {
-				getContentController().rotateY();
-				getModulProcess().repaint();
-			}
-
 		}
 
 		@Override
@@ -86,7 +91,8 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 			if (source == getInfoButtonModel()) {
 				getModulProcess().showInfoDialog();
 			} else if (source == getNeuButtonModel()) {
-				getModulProcess().start();
+//				getContentController().reset();
+				getModulProcess().createNewMountain(getHeightSliderModel().getValue());
 			} else if (source == getBeendenButtonModel()) {
 				getModulProcess().quit();
 			}
@@ -120,7 +126,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 		return buttonModelBeenden;
 	}
 
-	public BoundedRangeModel getHeightSLiderModel() {
+	public BoundedRangeModel getHeightSliderModel() {
 		if (sliderModelHeight == null) {
 			sliderModelHeight = new DefaultBoundedRangeModel();
 			sliderModelHeight.addChangeListener(this);
@@ -138,10 +144,11 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 		setUpdatingForm();
 		blockView();
 		try {
-			if (source == getHeightSLiderModel()) {
-				getModulProcess().updateHeight(getCurrentObject(), getHeightSLiderModel().getValue());
+			if (source == getHeightSliderModel()) {
+				getModulProcess().updateHeight(getCurrentObject(), getHeightSliderModel().getValue());
 			} else if (source == getDetailSliderModel()) {
 				getContentController().setRekTiefe(getDetailSliderModel().getValue());
+				getModulProcess().repaint();
 			}
 		} finally {
 			unblockView();
@@ -156,7 +163,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 			sliderModelDetail.setExtent(1);
 			sliderModelDetail.setMaximum(12);
 			sliderModelDetail.setMinimum(1);
-			sliderModelDetail.setValue(3);
+			sliderModelDetail.setValue(getContentController().getRekTiefe());
 			sliderModelDetail.addChangeListener(this);
 		}
 		return sliderModelDetail;

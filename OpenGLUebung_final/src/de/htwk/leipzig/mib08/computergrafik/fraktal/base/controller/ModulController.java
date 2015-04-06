@@ -1,7 +1,9 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
 
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.iface.ControllerStateIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.iface.ModulControllerIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface.GuiModulProcessIF;
 
 
 /**
@@ -11,10 +13,11 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess
 public abstract class ModulController<P extends GuiModulProcessIF, O> implements ModulControllerIF<P, O> {
 	
 	private final P modulProcess;
-	private ControllerState<O> state;
+	private final ControllerStateIF<O> state;
 
 	public ModulController(P modulProcess) {
 		this.modulProcess = modulProcess;
+		state = new ControllerState<>();
 	}
 	
 	@Override
@@ -45,6 +48,7 @@ public abstract class ModulController<P extends GuiModulProcessIF, O> implements
 			setCurrentObject(config);
 			fillFormImpl(config);
 			permitForm(true);
+			setCleared(false);
 		} catch (ToBeHandledByApplicationException e) {
 			handleEventException(e);
 		} finally {
@@ -63,10 +67,7 @@ public abstract class ModulController<P extends GuiModulProcessIF, O> implements
 		return getState().isUpdatingForm();
 	}
 
-	ControllerState<O> getState() {
-		if (state == null) {
-			state = new ControllerState<>();
-		}
+	ControllerStateIF<O> getState() {
 		return state;
 	}
 

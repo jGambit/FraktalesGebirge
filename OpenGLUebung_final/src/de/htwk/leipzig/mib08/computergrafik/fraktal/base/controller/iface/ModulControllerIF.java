@@ -1,6 +1,6 @@
-package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
+package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.iface;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface.GuiModulProcessIF;
 
 public interface ModulControllerIF<P extends GuiModulProcessIF, O> {
 

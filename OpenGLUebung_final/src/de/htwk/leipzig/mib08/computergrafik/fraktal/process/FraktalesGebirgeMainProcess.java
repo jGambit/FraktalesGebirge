@@ -1,31 +1,27 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.process;
 
-import java.awt.Component;
-import java.awt.Window;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess;
 
-public class FraktalesGebirgeMainProcess extends GuiModulProcess {
+public class FraktalesGebirgeMainProcess {
 
 	private static final class LazyInstanceHolder {
-		private static final FraktalesGebirgeMainProcess instance = new FraktalesGebirgeMainProcess(new Window(null));
+		private static final FraktalesGebirgeMainProcess instance = new FraktalesGebirgeMainProcess();
 	}
+	
+	private FraktalesGebirgeModulProcess modulProcess;
 
 	public static void main(String[] args) {
 		getInstance().getFraktalesGebirgeModulProcess().start();
 	}
 
-	private FraktalesGebirgeModulProcess modulProcess;
-
 	private FraktalesGebirgeModulProcess getFraktalesGebirgeModulProcess() {
 		if (modulProcess == null) {
-			modulProcess = new FraktalesGebirgeModulProcess(getParentViewComponent());
+			modulProcess = new FraktalesGebirgeModulProcess();
 		}
 		return modulProcess;
 	}
 
-	private FraktalesGebirgeMainProcess(Component parentViewComponent) {
-		super(parentViewComponent);
+	private FraktalesGebirgeMainProcess() {
 	}
 
 	public static FraktalesGebirgeMainProcess getInstance() {

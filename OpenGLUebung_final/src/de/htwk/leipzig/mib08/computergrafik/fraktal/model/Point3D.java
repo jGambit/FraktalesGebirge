@@ -6,13 +6,17 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
  *
  */
 public class Point3D {
+	
 	private static final float TWO = 2.0f;
 	private static final float ZERO = 0.0f;
 	private static final float EPSILON = 0.0005f;
-	public static final Point3D SOURCE = new Point3D(ZERO, ZERO, ZERO);
 	private final float x;
 	private final float y;
 	private final float z;
+	
+	public Point3D() {
+		this (ZERO, ZERO, ZERO);
+	}
 	
 	public Point3D(Number x, Number y, Number z) {
 		this(x == null ? ZERO : x.floatValue(), 

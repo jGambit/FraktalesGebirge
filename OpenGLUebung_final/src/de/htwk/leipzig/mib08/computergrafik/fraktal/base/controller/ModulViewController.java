@@ -1,7 +1,8 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller;
 
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.iface.ModulViewControllerIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface.GuiModulProcessIF;
 
 public abstract class ModulViewController<P extends GuiModulProcessIF, O, C extends ModulController<P, O>> extends ModulController<P, O> implements ModulViewControllerIF<P, O, C> {
 

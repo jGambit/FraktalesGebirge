@@ -1,4 +1,4 @@
-package de.htwk.leipzig.mib08.computergrafik.fraktal.base.process;
+package de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface;
 
 public interface GuiModulProcessIF {
 	

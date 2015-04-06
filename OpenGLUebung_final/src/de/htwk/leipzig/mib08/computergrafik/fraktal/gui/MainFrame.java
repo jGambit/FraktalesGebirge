@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui.ModulViewPanelIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui.iface.ModulViewPanelIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
 
 /**
@@ -39,8 +39,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	private final JMenuItem menuItemNeu = new JMenuItem("Neu");
 	private final JMenuItem menuItemBeenden = new JMenuItem("Beenden");
 	private final JRadioButtonMenuItem menuItemDreiecke = new JRadioButtonMenuItem("Linien");
+	private final JRadioButtonMenuItem menuItemLegacy = new JRadioButtonMenuItem("Legacy");
 	private final JRadioButtonMenuItem menuItemPyramiden = new JRadioButtonMenuItem("Flächen");
-	private final JRadioButtonMenuItem menuItemBeides = new JRadioButtonMenuItem("Linien und Flächen");
 	private final JMenuItem menuItemInfo = new JMenuItem("Info");
 	private final JPanel panelHeader = new JPanel();
 	private Component labelHeight;
@@ -62,8 +62,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		getMenuDatei().add(getMenuItemBeenden());
 
 		getMenuModus().add(getMenuItemDreiecke());
-		getMenuModus().add(getMenuItemPyramiden());
-		getMenuModus().add(getMenuItemBeides());
+		getMenuModus().add(getMenuItemLegacy());
+//		getMenuModus().add(getMenuItemPyramiden());
 
 		getMenuItemDreiecke().setSelected(true);
 
@@ -133,7 +133,7 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		getMenuItemInfo().setModel(controller.getInfoButtonModel());
 		getMenuItemNeu().setModel(controller.getNeuButtonModel());
 		getMenuItemBeenden().setModel(controller.getBeendenButtonModel());
-		getSliderHeight().setModel(controller.getHeightSLiderModel());
+		getSliderHeight().setModel(controller.getHeightSliderModel());
 		getSliderDetail().setModel(controller.getDetailSliderModel());
 	}
 
@@ -178,8 +178,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		return menuItemPyramiden;
 	}
 
-	JRadioButtonMenuItem getMenuItemBeides() {
-		return menuItemBeides;
+	JRadioButtonMenuItem getMenuItemLegacy() {
+		return menuItemLegacy;
 	}
 
 	JMenuItem getMenuItemInfo() {

@@ -15,15 +15,18 @@ public class Triangle3D {
 	private final Map<TrianglePoints, Point3D> points;
 	private float heightFactor;
 	private Triangle3D halvedMidTriangle;
+	private Triangle3D halvedTriangleA;
+	private Triangle3D halvedTriangleB;
+	private Triangle3D halvedTriangleC;
 	
-	private enum TrianglePoints {
+	enum TrianglePoints {
 		A,
 		B,
 		C
 	}
 	
 	public Triangle3D(Point3D a, Point3D b, Point3D c) {
-		this(a, b, c, 0.1f);
+		this(a, b, c, 0.05f);
 	}
 	
 	public Triangle3D(Point3D a, Point3D b, Point3D c, float heightFactor) {
@@ -66,25 +69,34 @@ public class Triangle3D {
 		return new Double(dz).floatValue();
 	}
 	
-	public Triangle3D createHalvedATriangle() {
-		Point3D a = getA();
-		Point3D b = getHalvedMidTriangle().getB();
-		Point3D c = getHalvedMidTriangle().getC();
-		return new Triangle3D(a, b, c);
+	public Triangle3D getHalvedATriangle() {
+		if (halvedTriangleA == null) {
+			Point3D a = getA();
+			Point3D b = getHalvedMidTriangle().getB();
+			Point3D c = getHalvedMidTriangle().getC();
+			halvedTriangleA = new Triangle3D(a, b, c);
+		}
+		return halvedTriangleA;
 	}
 	
-	public Triangle3D createHalvedBTriangle() {
-		Point3D a = getHalvedMidTriangle().getA();
-		Point3D b = getB();
-		Point3D c = getHalvedMidTriangle().getC();
-		return new Triangle3D(a, b, c);
+	public Triangle3D getHalvedBTriangle() {
+		if (halvedTriangleB == null) {
+			Point3D a = getHalvedMidTriangle().getA();
+			Point3D b = getB();
+			Point3D c = getHalvedMidTriangle().getC();
+			halvedTriangleB = new Triangle3D(a, b, c);
+		}
+		return halvedTriangleB;
 	}
 	
-	public Triangle3D createHalvedCTriangle() {
-		Point3D a = getHalvedMidTriangle().getA();
-		Point3D b = getHalvedMidTriangle().getB();
-		Point3D c = getC();
-		return new Triangle3D(a, b, c);
+	public Triangle3D getHalvedCTriangle() {
+		if (halvedTriangleC == null) {
+			Point3D a = getHalvedMidTriangle().getA();
+			Point3D b = getHalvedMidTriangle().getB();
+			Point3D c = getC();
+			halvedTriangleC = new Triangle3D(a, b, c);
+		}
+		return halvedTriangleC;
 	}
 	
 	public List<Triangle3D> createHalvedFractal() {
@@ -93,10 +105,10 @@ public class Triangle3D {
 	
 	private Triangle3D[] toHalvedFractalArray() {
 		return new Triangle3D[] {
-				createHalvedATriangle(),
-				createHalvedBTriangle(),
+				getHalvedATriangle(),
+				getHalvedBTriangle(),
 				getHalvedMidTriangle(),
-				createHalvedCTriangle()
+				getHalvedCTriangle()
 		};
 	}
 	
@@ -124,6 +136,14 @@ public class Triangle3D {
 
 	public void setHeightFactor(float heightFactor) {
 		this.heightFactor = heightFactor;
+		reset();
+	}
+
+	private void reset() {
+		halvedMidTriangle = null;
+		halvedTriangleA = null;
+		halvedTriangleB = null;
+		halvedTriangleC = null;
 	}
 	
 }

@@ -1,13 +1,14 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.process;
 
-import java.awt.Component;
 import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
 import javax.swing.JOptionPane;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.ModulProcessViewStack;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.MainFrame;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Point3D;
@@ -15,14 +16,15 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
 
 public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 
-	private static final Point3D BASE_C = new Point3D(80, -80, 0);
-	private static final Point3D BASE_B = new Point3D(0, 80, 0);
-	private static final Point3D BASE_A = new Point3D(-80, -80, 0);
+	private final Point3D BASE_C = new Point3D(80, -80, 0);
+	private final Point3D BASE_B = new Point3D(0, 80, 0);
+	private final Point3D BASE_A = new Point3D(-80, -80, 0);
 	private MainFrame view;
 	private MainFrameController mainFrameController;
 
-	public FraktalesGebirgeModulProcess(Component parentViewComponent) {
-		super(parentViewComponent);
+	public FraktalesGebirgeModulProcess() {
+		super(new ModulProcessViewStack());
+		pushView(getView());
 	}
 
 	public void repaint() {
@@ -55,15 +57,16 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 	}
 	
 	public void rekPaint(Triangle3D neu, GL2 gl, int lauf) {
-		if(lauf<1) return;	
+		if(lauf<1) {
+			paintTriangle(neu, gl);
+			return;	
+		}
 
 		// n-tes Dreieck
 		List<Triangle3D> halvedFractal = neu.createHalvedFractal();
 		for (Triangle3D fraktal : halvedFractal) {
 			rekPaint(fraktal, gl, lauf - 1);
 		}
-		
-		paintTriangle(neu, gl);
 	}
 
 	private void paintTriangle(Triangle3D neu, GL2 gl) {
@@ -83,7 +86,7 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 	}
 
 	public void showInfoDialog() {
-		JOptionPane.showMessageDialog(getView(), "Version 0.67 Beta",
+		JOptionPane.showMessageDialog(getCurrentViewComponent(), "Version 0.9 Beta",
 				"Copyright Dani & Enno", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -92,6 +95,7 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 		a = JOptionPane.showConfirmDialog(getView(),
 				"Beenden, echt jetz oder?");
 		if (a == JOptionPane.YES_OPTION) {
+			popView();
 			getView().setVisible(false);
 			getView().dispose();
 		}
@@ -104,6 +108,33 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 		Point3D c = currentObject.getC();
 		Triangle3D gebirge = new Triangle3D(a, b, c, factor);
 		getMainFrameController().fillForm(gebirge);
+		repaint();
+	}
+
+	public void createNewMountain(int height) {
+		updateHeight(createBeseTriangle(), height);
+	}
+
+	/**
+	 * Rotation um die y-Achse
+	 * @param drawable
+	 */
+	public void rotateY(GLAutoDrawable drawable) {
+		if (drawable != null) {
+			GL gl = drawable.getGL();
+			gl.getGL2().glRotatef(20.0f, 0.0f, 1.0f, 0.0f);
+		}
+	}
+
+	/**
+	 * Rotation um die x-Achse
+	 * @param drawable
+	 */
+	public void rotateX(GLAutoDrawable drawable) {
+		if (drawable != null) {
+			GL gl = drawable.getGL();
+			gl.getGL2().glRotatef(20.0f, 1.0f, 0.0f, 0.0f);
+		}
 	}
 
 }

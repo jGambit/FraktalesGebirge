@@ -19,7 +19,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcessIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.iface.GuiModulProcessIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.test.Foo;
 
 
