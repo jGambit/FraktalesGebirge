@@ -6,9 +6,11 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.GuiModulProcess;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.process.ModulProcessViewStack;
+import com.github.jgambit.emvc.process.GuiModulProcess;
+import com.github.jgambit.emvc.process.ModulProcessViewStack;
+
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.MainFrame;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Point3D;
@@ -95,9 +97,14 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 		a = JOptionPane.showConfirmDialog(getView(),
 				"Beenden, echt jetz oder?");
 		if (a == JOptionPane.YES_OPTION) {
-			popView();
-			getView().setVisible(false);
-			getView().dispose();
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					getView().setVisible(false);
+					getView().dispose();
+				}
+			});
 		}
 	}
 

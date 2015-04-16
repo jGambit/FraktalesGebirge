@@ -1,11 +1,13 @@
-package de.htwk.leipzig.mib08.computergrafik.fraktal.process;
+package de.htwk.leipzig.mib08.computergrafik.fraktal;
+
+import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
 
 
 
-public class FraktalesGebirgeMainProcess {
+public class FraktalesGebirgeMain {
 
 	private static final class LazyInstanceHolder {
-		private static final FraktalesGebirgeMainProcess instance = new FraktalesGebirgeMainProcess();
+		private static final FraktalesGebirgeMain instance = new FraktalesGebirgeMain();
 	}
 	
 	private FraktalesGebirgeModulProcess modulProcess;
@@ -21,10 +23,10 @@ public class FraktalesGebirgeMainProcess {
 		return modulProcess;
 	}
 
-	private FraktalesGebirgeMainProcess() {
+	private FraktalesGebirgeMain() {
 	}
 
-	public static FraktalesGebirgeMainProcess getInstance() {
+	public static FraktalesGebirgeMain getInstance() {
 		return LazyInstanceHolder.instance;
 	}
 

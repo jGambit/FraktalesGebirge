@@ -15,7 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui.iface.ModulViewPanelIF;
+import com.github.jgambit.emvc.gui.iface.ModulViewPanelIF;
+
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
 
 /**

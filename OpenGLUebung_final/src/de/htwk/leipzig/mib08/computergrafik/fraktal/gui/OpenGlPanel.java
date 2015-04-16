@@ -2,7 +2,8 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
 
 import javax.media.opengl.awt.GLJPanel;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.gui.iface.ModulBasePanelIF;
+import com.github.jgambit.emvc.gui.iface.ModulBasePanelIF;
+
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.OpenGlController;
 
 

@@ -5,8 +5,9 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.ModulController;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.exception.ToBeHandledByApplicationException;
+import com.github.jgambit.emvc.controller.ModulController;
+import com.github.jgambit.emvc.exception.ToBeHandledByApplicationException;
+
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
 

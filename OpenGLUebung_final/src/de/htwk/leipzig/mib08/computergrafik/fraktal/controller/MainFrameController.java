@@ -14,7 +14,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.base.controller.ModulViewController;
+import com.github.jgambit.emvc.controller.ModulViewController;
+
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.OpenGlPanel;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
