@@ -65,8 +65,7 @@ public class Triangle3D {
 	}
 
 	private float createRandomHeight() {
-		double dz = getHeightFactor() * Math.random() * getEuclideanLength();
-		return new Double(dz).floatValue();
+		return (float) (getHeightFactor() * Math.random() * getEuclideanLength());
 	}
 	
 	public Triangle3D getHalvedATriangle() {
@@ -100,16 +99,12 @@ public class Triangle3D {
 	}
 	
 	public List<Triangle3D> createHalvedFractal() {
-		return Arrays.asList(toHalvedFractalArray());
-	}
-	
-	private Triangle3D[] toHalvedFractalArray() {
-		return new Triangle3D[] {
+		return Arrays.asList(
 				getHalvedATriangle(),
 				getHalvedBTriangle(),
 				getHalvedMidTriangle(),
 				getHalvedCTriangle()
-		};
+				);
 	}
 	
 	@Override
@@ -121,9 +116,7 @@ public class Triangle3D {
 		float AB = getA().getEuclideanDistance(getB());
 		float BC = getB().getEuclideanDistance(getC());
 		float CA = getC().getEuclideanDistance(getA());
-		Point3D p = new Point3D(AB, BC, CA);
-		double result = p.getLength();
-		return Double.valueOf(result).floatValue();
+		return new Point3D(AB, BC, CA).getLength();
 	}
 
 	public float getLength() {
