@@ -17,10 +17,10 @@ import javax.swing.event.ChangeListener;
 import com.github.jgambit.emvc.controller.ModulViewController;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.OpenGlPanel;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeGuiProcess;
 
-public class MainFrameController extends ModulViewController<FraktalesGebirgeModulProcess, Triangle3D, OpenGlController> implements ActionListener, ChangeListener {
+public class MainFrameController extends ModulViewController<FraktalesGebirgeGuiProcess, Triangle3dIF, OpenGlController> implements ActionListener, ChangeListener {
 
 	private ClickAndZoomMouseAdapter mosueListener;
 	private ButtonModel buttonModelInfo;
@@ -63,7 +63,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeMod
 		}
 	}
 	
-	public MainFrameController(FraktalesGebirgeModulProcess modulProcess) {
+	public MainFrameController(FraktalesGebirgeGuiProcess modulProcess) {
 		super(modulProcess);
 	}
 

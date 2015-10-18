@@ -2,12 +2,14 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 
 import java.util.Arrays;
 
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Point3dIF;
+
 /**
  * Modell für einen Punkt im R3
  * @author Enrico Timoschenko (tarakos GmbH)
  *
  */
-public class Point3D {
+public class Point3D implements Point3dIF {
 	
 	private static final float TWO = 2.0f;
 	private static final float ZERO = 0.0f;
@@ -28,19 +30,22 @@ public class Point3D {
 		values = new float[] {x,y,z};
 	}
 	
+	@Override
 	public float getX() {
 		return values[0];
 	}
 	
+	@Override
 	public float getY() {
 		return values[1];
 	}
 	
+	@Override
 	public float getZ() {
 		return values[2];
 	}
 	
-	public Point3D createMidPoint(Point3D other) {
+	public Point3D createMidPoint(Point3dIF other) {
 		float dx = (other.getX() + getX()) / TWO;
 		float dy = (other.getY() + getY()) / TWO;
 		float dz = (other.getZ() + getZ()) / TWO;
@@ -60,7 +65,7 @@ public class Point3D {
 		return "(x, y, z) = " + Arrays.toString(values);
 	}
 	
-	public boolean isInLinearRange(Point3D other) {
+	public boolean isInLinearRange(Point3dIF other) {
 		return inRange(getX(), other.getX())
 				&& inRange(getY(), other.getY())
 				&& inRange(getZ(), other.getZ());
@@ -88,6 +93,7 @@ public class Point3D {
 		return (float) Math.sqrt(result);
 	}
 	
+	@Override
 	public float getLength() {
 		float result = ZERO;
 		for (int i = 0; i < values.length; i++) {

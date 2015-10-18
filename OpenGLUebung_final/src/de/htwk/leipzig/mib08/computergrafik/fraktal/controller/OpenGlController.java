@@ -8,17 +8,17 @@ import javax.media.opengl.GLEventListener;
 import com.github.jgambit.emvc.controller.ModulController;
 import com.github.jgambit.emvc.exception.ToBeHandledByApplicationException;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeModulProcess;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeGuiProcess;
 
-public class OpenGlController extends ModulController<FraktalesGebirgeModulProcess, Triangle3D> implements GLEventListener {
+public class OpenGlController extends ModulController<FraktalesGebirgeGuiProcess, Triangle3dIF> implements GLEventListener {
 
 	private boolean flagX = false;
 	private boolean flagY = false;
 	private GLAutoDrawable drawable;
 	private int rekTiefe = 5;
 	
-	public OpenGlController(FraktalesGebirgeModulProcess modulProcess) {
+	public OpenGlController(FraktalesGebirgeGuiProcess modulProcess) {
 		super(modulProcess);
 	}
 	
@@ -55,7 +55,7 @@ public class OpenGlController extends ModulController<FraktalesGebirgeModulProce
 	}
 
 	@Override
-	protected void fillFormImpl(Triangle3D config)
+	protected void fillFormImpl(Triangle3dIF config)
 			throws ToBeHandledByApplicationException {
 		if (getDrawable() != null) {
 			display(getDrawable());

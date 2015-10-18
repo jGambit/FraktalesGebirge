@@ -1,28 +1,22 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.model;
 
-import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
+
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
 
 /**
  * Modell für ein Dreieck im R3
  * @author Enrico Timoschenko (tarakos GmbH)
  *
  */
-public class Triangle3D {
+public class Triangle3D implements Triangle3dIF {
 	
 	private final Map<TrianglePoints, Point3D> points;
 	private float heightFactor;
-	private Triangle3D halvedMidTriangle;
-	private Triangle3D halvedTriangleA;
-	private Triangle3D halvedTriangleB;
-	private Triangle3D halvedTriangleC;
 	
-	enum TrianglePoints {
-		A,
-		B,
-		C
+	public Triangle3D(Triangle3dIF original, float height) {
+		this(original.getA(), original.getB(), original.getC(), height);
 	}
 	
 	public Triangle3D(Point3D a, Point3D b, Point3D c) {
@@ -37,74 +31,19 @@ public class Triangle3D {
 		setHeightFactor(heightFactor);
 	}
 	
+	@Override
 	public Point3D getA() {
 		return points.get(TrianglePoints.A);
 	}
 	
+	@Override
 	public Point3D getB() {
 		return points.get(TrianglePoints.B);
 	}
 	
+	@Override
 	public Point3D getC() {
 		return points.get(TrianglePoints.C);
-	}
-	
-	public Triangle3D getHalvedMidTriangle() {
-		if (halvedMidTriangle == null) {
-			Point3D a = createMidPointWithRandomHeight(getB(), getC());
-			Point3D b = createMidPointWithRandomHeight(getC(), getA()); 
-			Point3D c = createMidPointWithRandomHeight(getA(), getB());
-			halvedMidTriangle = new Triangle3D(a, b, c);
-		}
-		return halvedMidTriangle;
-	}
-
-	private Point3D createMidPointWithRandomHeight(Point3D start, Point3D end) {
-		Point3D midPoint = start.createMidPoint(end);
-		return midPoint.translateZ(createRandomHeight());
-	}
-
-	private float createRandomHeight() {
-		return (float) (getHeightFactor() * Math.random() * getEuclideanLength());
-	}
-	
-	public Triangle3D getHalvedATriangle() {
-		if (halvedTriangleA == null) {
-			Point3D a = getA();
-			Point3D b = getHalvedMidTriangle().getB();
-			Point3D c = getHalvedMidTriangle().getC();
-			halvedTriangleA = new Triangle3D(a, b, c);
-		}
-		return halvedTriangleA;
-	}
-	
-	public Triangle3D getHalvedBTriangle() {
-		if (halvedTriangleB == null) {
-			Point3D a = getHalvedMidTriangle().getA();
-			Point3D b = getB();
-			Point3D c = getHalvedMidTriangle().getC();
-			halvedTriangleB = new Triangle3D(a, b, c);
-		}
-		return halvedTriangleB;
-	}
-	
-	public Triangle3D getHalvedCTriangle() {
-		if (halvedTriangleC == null) {
-			Point3D a = getHalvedMidTriangle().getA();
-			Point3D b = getHalvedMidTriangle().getB();
-			Point3D c = getC();
-			halvedTriangleC = new Triangle3D(a, b, c);
-		}
-		return halvedTriangleC;
-	}
-	
-	public List<Triangle3D> createHalvedFractal() {
-		return Arrays.asList(
-				getHalvedATriangle(),
-				getHalvedBTriangle(),
-				getHalvedMidTriangle(),
-				getHalvedCTriangle()
-				);
 	}
 	
 	@Override
@@ -112,31 +51,21 @@ public class Triangle3D {
 		return "(A, B, C) = " + points.values();
 	}
 	
-	float getEuclideanLength() {
+	@Override
+	public float getLength() {
 		float AB = getA().getEuclideanDistance(getB());
 		float BC = getB().getEuclideanDistance(getC());
 		float CA = getC().getEuclideanDistance(getA());
 		return new Point3D(AB, BC, CA).getLength();
 	}
 
-	public float getLength() {
-		return getEuclideanLength();
-	}
-
+	@Override
 	public float getHeightFactor() {
 		return heightFactor;
 	}
 
 	public void setHeightFactor(float heightFactor) {
 		this.heightFactor = heightFactor;
-		reset();
 	}
 
-	private void reset() {
-		halvedMidTriangle = null;
-		halvedTriangleA = null;
-		halvedTriangleB = null;
-		halvedTriangleC = null;
-	}
-	
 }

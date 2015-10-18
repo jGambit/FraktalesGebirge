@@ -15,16 +15,18 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameControll
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.MainFrame;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Point3D;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Triangle3D;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
 
-public class FraktalesGebirgeModulProcess extends GuiModulProcess {
+public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 
 	private final Point3D BASE_C = new Point3D(80, -80, 0);
 	private final Point3D BASE_B = new Point3D(0, 80, 0);
 	private final Point3D BASE_A = new Point3D(-80, -80, 0);
 	private MainFrame view;
 	private MainFrameController mainFrameController;
+	private FraktalProcess fraktalProcess;
 
-	public FraktalesGebirgeModulProcess() {
+	public FraktalesGebirgeGuiProcess() {
 		super(new ModulProcessViewStack());
 		pushView(getView());
 	}
@@ -33,13 +35,13 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 		getView().repaint();
 	}
 
-	public void start() {
-		Triangle3D gebirge = createBeseTriangle();
-		getMainFrameController().fillForm(gebirge);
+	public void start(Triangle3dIF baseTriangle) {
+		baseTriangle = baseTriangle == null ? createBeseTriangle() : baseTriangle;
+		getMainFrameController().fillForm(baseTriangle);
 		showView(getView(), false);
 	}
 
-	private Triangle3D createBeseTriangle() {
+	private Triangle3dIF createBeseTriangle() {
 		return new Triangle3D(BASE_A, BASE_B, BASE_C);
 	}
 	
@@ -58,20 +60,31 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 		return mainFrameController;
 	}
 	
-	public void rekPaint(Triangle3D neu, GL2 gl, int lauf) {
+	public void rekPaint(Triangle3dIF neu, GL2 gl, int lauf) {
 		if(lauf<1) {
 			paintTriangle(neu, gl);
 			return;	
 		}
 
 		// n-tes Dreieck
-		List<Triangle3D> halvedFractal = neu.createHalvedFractal();
-		for (Triangle3D fraktal : halvedFractal) {
+		List<Triangle3dIF> halvedFractal = createHalvedFractal(neu);
+		for (Triangle3dIF fraktal : halvedFractal) {
 			rekPaint(fraktal, gl, lauf - 1);
 		}
 	}
+	
+	List<Triangle3dIF> createHalvedFractal(Triangle3dIF triangle) {
+		return getFraktalProcess().createFraktalMountain(triangle);
+	}
 
-	private void paintTriangle(Triangle3D neu, GL2 gl) {
+	FraktalProcess getFraktalProcess() {
+		if (fraktalProcess == null) {
+			fraktalProcess = new FraktalProcess();
+		}
+		return fraktalProcess;
+	}
+
+	private void paintTriangle(Triangle3dIF neu, GL2 gl) {
 		gl.glBegin(GL.GL_LINE_LOOP);
 		
 		gl.glColor3f(0, 0, 0);
@@ -84,7 +97,7 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 	
 	float gibColor(float a, float b, float c) {
 		Double rc = new Double((a + b +c) / 3.0f);
-		return new Float(Math.abs( (rc / 60.0f ) )); 
+		return new Float(Math.abs( (rc / 60.0f ) ));
 	}
 
 	public void showInfoDialog() {
@@ -108,12 +121,12 @@ public class FraktalesGebirgeModulProcess extends GuiModulProcess {
 		}
 	}
 
-	public void updateHeight(Triangle3D currentObject, int value) {
+	public void updateHeight(Triangle3dIF currentObject, int value) {
 		float factor = value * 0.005f;
 		Point3D a = currentObject.getA();
 		Point3D b = currentObject.getB();
 		Point3D c = currentObject.getC();
-		Triangle3D gebirge = new Triangle3D(a, b, c, factor);
+		Triangle3dIF gebirge = new Triangle3D(a, b, c, factor);
 		getMainFrameController().fillForm(gebirge);
 		repaint();
 	}
