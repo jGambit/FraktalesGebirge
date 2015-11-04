@@ -9,5 +9,9 @@ public interface Point3dIF {
 	float getZ();
 
 	float getLength();
+	
+	float[] getVector();
+	
+	float getDistance(Point3dIF other);
 
 }

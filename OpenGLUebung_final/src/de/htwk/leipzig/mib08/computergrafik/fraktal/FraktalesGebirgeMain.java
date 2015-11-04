@@ -1,9 +1,9 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
+import java.util.Arrays;
+import java.util.List;
+
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeGuiProcess;
-
-
 
 public class FraktalesGebirgeMain {
 
@@ -14,12 +14,12 @@ public class FraktalesGebirgeMain {
 	private FraktalesGebirgeGuiProcess modulProcess;
 
 	public static void main(String[] args) {
-		Triangle3dIF baseTriangle = getInstance().parseTriangle(args);
-		getInstance().getFraktalesGebirgeModulProcess().start(baseTriangle);
+		getInstance().startDialog(args);
 	}
 
-	Triangle3dIF parseTriangle(String[] args) {
-		return null;
+	private void startDialog(String[] args) {
+		List<String> coordinates = args == null ? null : Arrays.asList(args);
+		getFraktalesGebirgeModulProcess().start(coordinates);
 	}
 
 	FraktalesGebirgeGuiProcess getFraktalesGebirgeModulProcess() {

@@ -1,17 +1,19 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.model.Point3D;
+import java.awt.Color;
 
 public interface Triangle3dIF {
 
-	Point3D getA();
+	Point3dIF getA();
 
-	Point3D getB();
+	Point3dIF getB();
 
-	Point3D getC();
+	Point3dIF getC();
 
 	float getLength();
 
 	float getHeightFactor();
+
+	Color getColor();
 
 }

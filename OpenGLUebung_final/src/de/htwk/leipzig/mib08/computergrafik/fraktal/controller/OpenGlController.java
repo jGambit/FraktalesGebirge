@@ -8,10 +8,10 @@ import javax.media.opengl.GLEventListener;
 import com.github.jgambit.emvc.controller.ModulController;
 import com.github.jgambit.emvc.exception.ToBeHandledByApplicationException;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeGuiProcess;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.valueobject.FraktalesGebirgeConfig;
 
-public class OpenGlController extends ModulController<FraktalesGebirgeGuiProcess, Triangle3dIF> implements GLEventListener {
+public class OpenGlController extends ModulController<FraktalesGebirgeGuiProcess, FraktalesGebirgeConfig> implements GLEventListener {
 
 	private boolean flagX = false;
 	private boolean flagY = false;
@@ -55,7 +55,7 @@ public class OpenGlController extends ModulController<FraktalesGebirgeGuiProcess
 	}
 
 	@Override
-	protected void fillFormImpl(Triangle3dIF config)
+	protected void fillFormImpl(FraktalesGebirgeConfig config)
 			throws ToBeHandledByApplicationException {
 		if (getDrawable() != null) {
 			display(getDrawable());
@@ -75,9 +75,10 @@ public class OpenGlController extends ModulController<FraktalesGebirgeGuiProcess
 			GL gl = arg0.getGL();
 		    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		    
-		    if (getCurrentObject() != null) {
-		    	getModulProcess().rekPaint(getCurrentObject(), gl.getGL2(), getRekTiefe());
-		    }
+			if (getCurrentObject() != null) {
+				getModulProcess().rekPaint(getCurrentObject().getGebirge(), gl.getGL2(),
+						getCurrentObject().getDrawingMode(), getRekTiefe());
+			}
 		    
 		  if(flagX) 
 			  getModulProcess().rotateX(arg0);
@@ -138,10 +139,10 @@ public class OpenGlController extends ModulController<FraktalesGebirgeGuiProcess
 			int arg4) {
 	}
 
-	public void reset() {
-		if (getDrawable() != null) {
-			getDrawable().getGL().getGL2().glLoadIdentity();
-		}
-	}
+//	public void reset() {
+//		if (getDrawable() != null) {
+//			getDrawable().getGL().getGL2().glLoadIdentity();
+//		}
+//	}
 	
 }

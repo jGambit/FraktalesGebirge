@@ -10,17 +10,22 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.DefaultButtonModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 import com.github.jgambit.emvc.controller.ModulViewController;
+import com.github.jgambit.emvc.exception.ToBeHandledByApplicationException;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.OpenGlPanel;
-import de.htwk.leipzig.mib08.computergrafik.fraktal.model.iface.Triangle3dIF;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.DrawingMode;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeGuiProcess;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.valueobject.FraktalesGebirgeConfig;
 
-public class MainFrameController extends ModulViewController<FraktalesGebirgeGuiProcess, Triangle3dIF, OpenGlController> implements ActionListener, ChangeListener {
+public class MainFrameController extends ModulViewController<FraktalesGebirgeGuiProcess, FraktalesGebirgeConfig, OpenGlController> implements ActionListener, ChangeListener, ListDataListener {
 
 	private ClickAndZoomMouseAdapter mosueListener;
 	private ButtonModel buttonModelInfo;
@@ -28,6 +33,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 	private ButtonModel buttonModelBeenden;
 	private BoundedRangeModel sliderModelHeight;
 	private BoundedRangeModel sliderModelDetail;
+	private DefaultComboBoxModel<DrawingMode> comboModelDrawingMode;
 	
 	private class ClickAndZoomMouseAdapter extends MouseAdapter {
 		@Override
@@ -72,6 +78,21 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		return new OpenGlController(getModulProcess());
 	}
 	
+	@Override
+	protected void clearFormImpl() throws ToBeHandledByApplicationException {
+		super.clearFormImpl();
+		getComboModelDrawingMode().removeAllElements();
+	}
+	
+	@Override
+	protected void fillFormImpl(FraktalesGebirgeConfig config) throws ToBeHandledByApplicationException {
+		super.fillFormImpl(config);
+		DrawingMode[] values = DrawingMode.values();
+		for (DrawingMode mode : values) {
+			getComboModelDrawingMode().addElement(mode);
+		}
+	}
+	
 	public ClickAndZoomMouseAdapter getMouseListener() {
 		if (mosueListener == null) {
 			mosueListener = new ClickAndZoomMouseAdapter();
@@ -92,7 +113,6 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 			if (source == getInfoButtonModel()) {
 				getModulProcess().showInfoDialog();
 			} else if (source == getNeuButtonModel()) {
-//				getContentController().reset();
 				getModulProcess().createNewMountain(getHeightSliderModel().getValue());
 			} else if (source == getBeendenButtonModel()) {
 				getModulProcess().quit();
@@ -169,5 +189,44 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		}
 		return sliderModelDetail;
 	}
-	
+
+	public DefaultComboBoxModel<DrawingMode> getComboModelDrawingMode() {
+		if (comboModelDrawingMode == null) {
+			comboModelDrawingMode = new DefaultComboBoxModel<>();
+			comboModelDrawingMode.addListDataListener(this);
+		}
+		return comboModelDrawingMode;
+	}
+
+	@Override
+	public void intervalAdded(ListDataEvent e) {
+		contentsChanged(e);
+	}
+
+	@Override
+	public void intervalRemoved(ListDataEvent e) {
+		contentsChanged(e);
+	}
+
+	@Override
+	public void contentsChanged(ListDataEvent e) {
+		if (isUpdatingForm()) {
+			return;
+		}
+		
+		Object source = e.getSource();
+		setUpdatingForm();
+		blockView();
+		try {
+			if (source == getComboModelDrawingMode()) {
+				Object selected = getComboModelDrawingMode().getSelectedItem();
+				DrawingMode mode = selected instanceof DrawingMode ? (DrawingMode) selected : DrawingMode.LINE_LOOP;
+				getCurrentObject().setDrawingMode(mode);
+			}
+		} finally {
+			unblockView();
+			unSetUpdatingForm();
+		}
+	}
+
 }

@@ -1,23 +1,23 @@
 package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
 import javax.swing.Box;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
 
 import com.github.jgambit.emvc.gui.iface.ModulViewPanelIF;
 
 import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.MainFrameController;
+import de.htwk.leipzig.mib08.computergrafik.fraktal.model.DrawingMode;
 
 /**
  * @author Daniel und Enno
@@ -29,25 +29,21 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	private static final String TITLE = "Fraktales Gebirge";
 	private static final Dimension WINODW_SIZE = new Dimension(900, 900);
 	private static final Point WINDOW_LOCATION = new Point(100, 100);
-	private final JPanel contetnPanel = new JPanel();
-	private final OpenGlPanel glPanel = new OpenGlPanel();
-
-	private final JMenuBar menuLeiste = new JMenuBar();
-	private final JMenu menuDatei = new JMenu("Datei");
-	private final JMenu menuModus = new JMenu("Modus");
-	private final JMenu menuHilfe = new JMenu("Hilfe");
-
-	private final JMenuItem menuItemNeu = new JMenuItem("Neu");
-	private final JMenuItem menuItemBeenden = new JMenuItem("Beenden");
-	private final JRadioButtonMenuItem menuItemDreiecke = new JRadioButtonMenuItem("Linien");
-	private final JRadioButtonMenuItem menuItemLegacy = new JRadioButtonMenuItem("Legacy");
-	private final JRadioButtonMenuItem menuItemPyramiden = new JRadioButtonMenuItem("Flächen");
-	private final JMenuItem menuItemInfo = new JMenuItem("Info");
-	private final JPanel panelHeader = new JPanel();
-	private Component labelHeight;
+	private JPanel contetnPanel;
+	private OpenGlPanel glPanel;
+	private JMenuBar menuLeiste;
+	private JMenu menuDatei;
+	private JMenu menuHilfe;
+	private JMenuItem menuItemNeu;
+	private JMenuItem menuItemBeenden;
+	private JMenuItem menuItemInfo;
+	private JPanel panelHeader;
+	private JLabel labelHeight;
 	private JSlider sliderHeight;
 	private JLabel labelDetail;
 	private JSlider sliderDetail;
+	private JLabel labelModus;
+	private JComboBox<DrawingMode> comboBoxDrawingMode;
 
 	public MainFrame() {
 		super();
@@ -56,20 +52,12 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		setLocation(WINDOW_LOCATION);
 
 		getMenuLeiste().add(getMenuDatei());
-		getMenuLeiste().add(getMenuModus());
 		getMenuLeiste().add(getMenuHilfe());
 
 		getMenuDatei().add(getMenuItemNeu());
 		getMenuDatei().add(getMenuItemBeenden());
 
-		getMenuModus().add(getMenuItemDreiecke());
-		getMenuModus().add(getMenuItemLegacy());
-//		getMenuModus().add(getMenuItemPyramiden());
-
-		getMenuItemDreiecke().setSelected(true);
-
 		getMenuHilfe().add(getMenuItemInfo());
-
 		setJMenuBar(getMenuLeiste());
 
 		setContentPane(getContetnPanel());
@@ -79,6 +67,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		Box line1 = Box.createHorizontalBox();
 		line1.add(getLabelHeight());
 		line1.add(getSliderHeight());
+		line1.add(getLabelMode());
+		line1.add(getComboBoxDrawingMode());
 		Box line2 = Box.createHorizontalBox();
 		line2.add(getLabelDetail());
 		line2.add(getSliderDetail());
@@ -88,6 +78,20 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		getHeaderPanel().add(lines);
 	}
 	
+	private JComboBox<DrawingMode> getComboBoxDrawingMode() {
+		if (comboBoxDrawingMode == null) {
+			comboBoxDrawingMode = new JComboBox<>();
+		}
+		return comboBoxDrawingMode;
+	}
+
+	private JLabel getLabelMode() {
+		if (labelModus == null) {
+			labelModus = new JLabel("Drawing-mode:");
+		}
+		return labelModus;
+	}
+
 	JSlider getSliderDetail() {
 		if (sliderDetail == null) {
 			sliderDetail = new JSlider();
@@ -119,7 +123,7 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		return sliderHeight;
 	}
 
-	private Component getLabelHeight() {
+	private JLabel getLabelHeight() {
 		if (labelHeight == null) {
 			labelHeight = new JLabel("Height: ");
 		}
@@ -136,59 +140,72 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		getMenuItemBeenden().setModel(controller.getBeendenButtonModel());
 		getSliderHeight().setModel(controller.getHeightSliderModel());
 		getSliderDetail().setModel(controller.getDetailSliderModel());
+		getComboBoxDrawingMode().setModel(controller.getComboModelDrawingMode());
 	}
 
 	JMenu getMenuHilfe() {
+		if (menuHilfe == null) {
+			menuHilfe = new JMenu("Hilfe");
+		}
 		return menuHilfe;
 	}
 
-	JMenu getMenuModus() {
-		return menuModus;
-	}
-
 	JMenu getMenuDatei() {
+		if (menuDatei == null) {
+			menuDatei = new JMenu("Datei");
+		}
 		return menuDatei;
 	}
 
 	JMenuBar getMenuLeiste() {
+		if (menuLeiste == null) {
+			menuLeiste = new JMenuBar();
+		}
 		return menuLeiste;
 	}
 
 	@Override
 	public OpenGlPanel getSubPanel() {
+		if (glPanel == null) {
+			glPanel = new OpenGlPanel();
+		}
 		return glPanel;
 	}
 
 	JPanel getContetnPanel() {
+		if (contetnPanel == null) {
+			contetnPanel = new JPanel();
+		}
 		return contetnPanel;
 	}
 
 	JMenuItem getMenuItemNeu() {
+		if (menuItemNeu == null) {
+			menuItemNeu = new JMenuItem("Neu");
+		}
 		return menuItemNeu;
 	}
 
 	JMenuItem getMenuItemBeenden() {
+		if (menuItemBeenden == null) {
+			menuItemBeenden = new JMenuItem("Beenden");
+		}
 		return menuItemBeenden;
 	}
 
-	JRadioButtonMenuItem getMenuItemDreiecke() {
-		return menuItemDreiecke;
-	}
-
-	JRadioButtonMenuItem getMenuItemPyramiden() {
-		return menuItemPyramiden;
-	}
-
-	JRadioButtonMenuItem getMenuItemLegacy() {
-		return menuItemLegacy;
-	}
-
 	JMenuItem getMenuItemInfo() {
+		if (menuItemInfo == null) {
+			menuItemInfo = new JMenuItem("Info");
+		}
 		return menuItemInfo;
 	}
 
 	JPanel getHeaderPanel() {
+		if (panelHeader == null) {
+			panelHeader = new JPanel();
+//			panelHeader.setLayout(new BorderLayout());
+		}
 		return panelHeader;
 	}
-
+	
 }
