@@ -31,10 +31,6 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 		pushView(getView());
 	}
 
-	public void repaint() {
-		getView().repaint();
-	}
-
 	public void start(List<String> coordinates) {
 		Triangle3dIF baseTriangle = getFraktalProcess().createTriangle(coordinates);
 		FraktalesGebirgeConfig config = new FraktalesGebirgeConfig();
@@ -57,11 +53,11 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 		}
 		return mainFrameController;
 	}
-	
-	public void rekPaint(Triangle3dIF neu, GL2 gl, DrawingMode mode, int lauf) {
+
+	void rekPaint(Triangle3dIF neu, GL2 gl, DrawingMode mode, int lauf) {
 		if(lauf<1) {
 			paintTriangle(neu, mode, gl);
-			return;	
+			return;
 		}
 
 		// n-tes Dreieck
@@ -70,7 +66,7 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 			rekPaint(fraktal, gl, mode, lauf - 1);
 		}
 	}
-	
+
 	List<Triangle3dIF> createHalvedFractal(Triangle3dIF triangle) {
 		return getFraktalProcess().createFraktalMountain(triangle);
 	}
@@ -84,17 +80,17 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 
 	private void paintTriangle(Triangle3dIF neu, DrawingMode mode, GL2 gl) {
 		gl.glBegin(mode == null ? GL.GL_LINE_LOOP : mode.getGlMode());
-		
+
 		Color color = neu.getColor();
 		float[] rgb = color.getComponents(null);
 		gl.glColor3f(rgb[0], rgb[1], rgb[2]);
 		gl.glVertex3fv(neu.getA().getVector(), 0);
 		gl.glVertex3fv(neu.getB().getVector(), 0);
 		gl.glVertex3fv(neu.getC().getVector(), 0);
-    	
+
     	gl.glEnd();
 	}
-	
+
 	float gibColor(float a, float b, float c) {
 		Double rc = new Double((a + b +c) / 3.0f);
 		return new Float(Math.abs( (rc / 60.0f ) ));
@@ -111,7 +107,7 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 				"Beenden, echt jetz oder?");
 		if (a == JOptionPane.YES_OPTION) {
 			SwingUtilities.invokeLater(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					getView().setVisible(false);
@@ -127,8 +123,6 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 		Point3dIF b = config.getGebirge().getB();
 		Point3dIF c = config.getGebirge().getC();
 		config.setGebirge(new Triangle3D(a, b, c, factor));
-		getMainFrameController().fillForm(config);
-		repaint();
 	}
 
 	public void createNewMountain(int height) {
@@ -160,7 +154,23 @@ public class FraktalesGebirgeGuiProcess extends GuiModulProcess {
 	}
 
 	public Triangle3dIF parseTriangle(List<String> coordinates) {
-		return getFraktalProcess().createTriangle(coordinates); 
+		return getFraktalProcess().createTriangle(coordinates);
+	}
+
+	public void display(GLAutoDrawable drawable, FraktalesGebirgeConfig config) {
+		GL gl = drawable.getGL();
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+
+		if (config.isRotateX()) {
+			rotateX(drawable);
+			config.unsetRotation();
+		}
+		if (config.isRotateY()) {
+			rotateY(drawable);
+			config.unsetRotation();
+		}
+		rekPaint(config.getGebirge(), gl.getGL2(),
+				config.getDrawingMode(), config.getRekTiefe());
 	}
 
 }

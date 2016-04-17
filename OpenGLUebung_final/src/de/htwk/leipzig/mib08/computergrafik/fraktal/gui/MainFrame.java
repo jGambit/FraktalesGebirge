@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
 import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -21,7 +23,7 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.model.DrawingMode;
 
 /**
  * @author Daniel und Enno
- * 
+ *
  */
 public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameController, OpenGlPanel> {
 
@@ -77,7 +79,7 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		lines.add(line2);
 		getHeaderPanel().add(lines);
 	}
-	
+
 	private JComboBox<DrawingMode> getComboBoxDrawingMode() {
 		if (comboBoxDrawingMode == null) {
 			comboBoxDrawingMode = new JComboBox<>();
@@ -167,7 +169,9 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	@Override
 	public OpenGlPanel getSubPanel() {
 		if (glPanel == null) {
-			glPanel = new OpenGlPanel();
+			GLProfile glprofile = GLProfile.getDefault();
+			GLCapabilities glcapabilities = new GLCapabilities(glprofile);
+			glPanel = new OpenGlPanel(glcapabilities);
 		}
 		return glPanel;
 	}
@@ -207,5 +211,5 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		}
 		return panelHeader;
 	}
-	
+
 }

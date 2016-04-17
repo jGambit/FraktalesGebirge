@@ -20,7 +20,6 @@ import javax.swing.event.ListDataListener;
 import com.github.jgambit.emvc.controller.ModulViewController;
 import com.github.jgambit.emvc.exception.ToBeHandledByApplicationException;
 
-import de.htwk.leipzig.mib08.computergrafik.fraktal.gui.OpenGlPanel;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.model.DrawingMode;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.process.FraktalesGebirgeGuiProcess;
 import de.htwk.leipzig.mib08.computergrafik.fraktal.valueobject.FraktalesGebirgeConfig;
@@ -34,7 +33,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 	private BoundedRangeModel sliderModelHeight;
 	private BoundedRangeModel sliderModelDetail;
 	private DefaultComboBoxModel<DrawingMode> comboModelDrawingMode;
-	
+
 	private class ClickAndZoomMouseAdapter extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent arg0) {
@@ -42,12 +41,12 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 			blockView();
 			try {
 				if (SwingUtilities.isLeftMouseButton(arg0)) {
-					getContentController().rotateX();
-					getModulProcess().repaint();
+					getCurrentObject().setRotateX();
+					getContentController().fillForm(getCurrentObject());
 				}
 				if (SwingUtilities.isRightMouseButton(arg0)) {
-					getContentController().rotateY();
-					getModulProcess().repaint();
+					getCurrentObject().setRotateY();
+					getContentController().fillForm(getCurrentObject());
 				}
 			} finally {
 				unblockView();
@@ -58,17 +57,15 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			if (e.getWheelRotation() < 0) {
-				// zoom in
-				OpenGlPanel.zoomIn = true;
-				getModulProcess().repaint();
+				getCurrentObject().setZoomIn();
+				getContentController().fillForm(getCurrentObject());
 			} else {
-				// zoom out
-				OpenGlPanel.zoomOut = true;
-				getModulProcess().repaint();
+				getCurrentObject().setZoomOut();
+				getContentController().fillForm(getCurrentObject());
 			}
 		}
 	}
-	
+
 	public MainFrameController(FraktalesGebirgeGuiProcess modulProcess) {
 		super(modulProcess);
 	}
@@ -77,13 +74,14 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 	protected OpenGlController createContentControllerImpl() {
 		return new OpenGlController(getModulProcess());
 	}
-	
+
 	@Override
 	protected void clearFormImpl() throws ToBeHandledByApplicationException {
 		super.clearFormImpl();
 		getComboModelDrawingMode().removeAllElements();
+		getDetailSliderModel().setValue(5);
 	}
-	
+
 	@Override
 	protected void fillFormImpl(FraktalesGebirgeConfig config) throws ToBeHandledByApplicationException {
 		super.fillFormImpl(config);
@@ -91,8 +89,13 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		for (DrawingMode mode : values) {
 			getComboModelDrawingMode().addElement(mode);
 		}
+		DrawingMode drawingMode = config.getDrawingMode();
+		if (drawingMode != null) {
+			getComboModelDrawingMode().setSelectedItem(drawingMode);
+		}
+		getDetailSliderModel().setValue(config.getRekTiefe());
 	}
-	
+
 	public ClickAndZoomMouseAdapter getMouseListener() {
 		if (mosueListener == null) {
 			mosueListener = new ClickAndZoomMouseAdapter();
@@ -105,7 +108,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		if (isUpdatingForm()) {
 			return;
 		}
-		
+
 		Object source = e.getSource();
 		setUpdatingForm();
 		blockView();
@@ -114,6 +117,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 				getModulProcess().showInfoDialog();
 			} else if (source == getNeuButtonModel()) {
 				getModulProcess().createNewMountain(getHeightSliderModel().getValue());
+				getContentController().fillForm(getCurrentObject());
 			} else if (source == getBeendenButtonModel()) {
 				getModulProcess().quit();
 			}
@@ -160,22 +164,23 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		if (isUpdatingForm()) {
 			return;
 		}
-		
+
 		Object source = e.getSource();
 		setUpdatingForm();
 		blockView();
 		try {
 			if (source == getHeightSliderModel()) {
 				getModulProcess().updateHeight(getCurrentObject(), getHeightSliderModel().getValue());
+				getContentController().fillForm(getCurrentObject());
 			} else if (source == getDetailSliderModel()) {
-				getContentController().setRekTiefe(getDetailSliderModel().getValue());
-				getModulProcess().repaint();
+				getCurrentObject().setRekTiefe(getDetailSliderModel().getValue());
+				getContentController().fillForm(getCurrentObject());
 			}
 		} finally {
 			unblockView();
 			unSetUpdatingForm();
 		}
-		
+
 	}
 
 	public BoundedRangeModel getDetailSliderModel() {
@@ -184,7 +189,6 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 			sliderModelDetail.setExtent(1);
 			sliderModelDetail.setMaximum(12);
 			sliderModelDetail.setMinimum(1);
-			sliderModelDetail.setValue(getContentController().getRekTiefe());
 			sliderModelDetail.addChangeListener(this);
 		}
 		return sliderModelDetail;
@@ -213,7 +217,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 		if (isUpdatingForm()) {
 			return;
 		}
-		
+
 		Object source = e.getSource();
 		setUpdatingForm();
 		blockView();
@@ -222,6 +226,7 @@ public class MainFrameController extends ModulViewController<FraktalesGebirgeGui
 				Object selected = getComboModelDrawingMode().getSelectedItem();
 				DrawingMode mode = selected instanceof DrawingMode ? (DrawingMode) selected : DrawingMode.LINE_LOOP;
 				getCurrentObject().setDrawingMode(mode);
+				getContentController().fillForm(getCurrentObject());
 			}
 		} finally {
 			unblockView();
