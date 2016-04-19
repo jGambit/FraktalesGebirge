@@ -52,32 +52,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		setSize(WINODW_SIZE);
 		setTitle(TITLE);
 		setLocation(WINDOW_LOCATION);
-
-		getMenuLeiste().add(getMenuDatei());
-		getMenuLeiste().add(getMenuHilfe());
-
-		getMenuDatei().add(getMenuItemNeu());
-		getMenuDatei().add(getMenuItemBeenden());
-
-		getMenuHilfe().add(getMenuItemInfo());
 		setJMenuBar(getMenuLeiste());
-
-		setContentPane(getContetnPanel());
-		getContetnPanel().setLayout(new BorderLayout());
-		getContetnPanel().add(getSubPanel(), BorderLayout.CENTER);
-		getContetnPanel().add(getHeaderPanel(), BorderLayout.NORTH);
-		Box line1 = Box.createHorizontalBox();
-		line1.add(getLabelHeight());
-		line1.add(getSliderHeight());
-		line1.add(getLabelMode());
-		line1.add(getComboBoxDrawingMode());
-		Box line2 = Box.createHorizontalBox();
-		line2.add(getLabelDetail());
-		line2.add(getSliderDetail());
-		Box lines = Box.createVerticalBox();
-		lines.add(line1);
-		lines.add(line2);
-		getHeaderPanel().add(lines);
+		setContentPane(getMainPanel());
 	}
 
 	private JComboBox<DrawingMode> getComboBoxDrawingMode() {
@@ -148,6 +124,7 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	JMenu getMenuHilfe() {
 		if (menuHilfe == null) {
 			menuHilfe = new JMenu("Hilfe");
+			menuHilfe.add(getMenuItemInfo());
 		}
 		return menuHilfe;
 	}
@@ -155,6 +132,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	JMenu getMenuDatei() {
 		if (menuDatei == null) {
 			menuDatei = new JMenu("Datei");
+			menuDatei.add(getMenuItemNeu());
+			menuDatei.add(getMenuItemBeenden());
 		}
 		return menuDatei;
 	}
@@ -162,6 +141,8 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	JMenuBar getMenuLeiste() {
 		if (menuLeiste == null) {
 			menuLeiste = new JMenuBar();
+			menuLeiste.add(getMenuDatei());
+			menuLeiste.add(getMenuHilfe());
 		}
 		return menuLeiste;
 	}
@@ -176,9 +157,12 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		return glPanel;
 	}
 
-	JPanel getContetnPanel() {
+	JPanel getMainPanel() {
 		if (contetnPanel == null) {
 			contetnPanel = new JPanel();
+			contetnPanel.setLayout(new BorderLayout());
+			contetnPanel.add(getSubPanel(), BorderLayout.CENTER);
+			contetnPanel.add(getHeaderPanel(), BorderLayout.NORTH);
 		}
 		return contetnPanel;
 	}
@@ -208,6 +192,18 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 		if (panelHeader == null) {
 			panelHeader = new JPanel();
 //			panelHeader.setLayout(new BorderLayout());
+			Box line1 = Box.createHorizontalBox();
+			line1.add(getLabelHeight());
+			line1.add(getSliderHeight());
+			line1.add(getLabelMode());
+			line1.add(getComboBoxDrawingMode());
+			Box line2 = Box.createHorizontalBox();
+			line2.add(getLabelDetail());
+			line2.add(getSliderDetail());
+			Box lines = Box.createVerticalBox();
+			lines.add(line1);
+			lines.add(line2);
+			panelHeader.add(lines);
 		}
 		return panelHeader;
 	}

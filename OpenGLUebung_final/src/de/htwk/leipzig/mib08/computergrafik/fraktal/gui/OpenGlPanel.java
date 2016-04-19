@@ -11,8 +11,6 @@ import de.htwk.leipzig.mib08.computergrafik.fraktal.controller.OpenGlController;
 public class OpenGlPanel extends GLJPanel implements ModulBasePanelIF<OpenGlController> {
 
 	private static final long serialVersionUID = -8464667398691555779L;
-	public static boolean zoomIn = false;
-	public static boolean zoomOut = false;
 
 	public OpenGlPanel(GLCapabilities capabilities) {
 		super(capabilities);
