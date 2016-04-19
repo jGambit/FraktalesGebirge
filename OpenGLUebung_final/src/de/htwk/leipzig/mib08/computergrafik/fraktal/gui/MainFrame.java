@@ -2,11 +2,13 @@ package de.htwk.leipzig.mib08.computergrafik.fraktal.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
-import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,7 +33,7 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	private static final String TITLE = "Fraktales Gebirge";
 	private static final Dimension WINODW_SIZE = new Dimension(900, 900);
 	private static final Point WINDOW_LOCATION = new Point(100, 100);
-	private JPanel contetnPanel;
+	private JPanel mainPanel;
 	private OpenGlPanel glPanel;
 	private JMenuBar menuLeiste;
 	private JMenu menuDatei;
@@ -73,7 +75,7 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	JSlider getSliderDetail() {
 		if (sliderDetail == null) {
 			sliderDetail = new JSlider();
-			sliderDetail.setMajorTickSpacing(5);
+			sliderDetail.setMajorTickSpacing(2);
 			sliderDetail.setMinorTickSpacing(1);
 			sliderDetail.setPaintTicks(true);
 			sliderDetail.setPaintLabels(true);
@@ -150,21 +152,19 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	@Override
 	public OpenGlPanel getSubPanel() {
 		if (glPanel == null) {
-			GLProfile glprofile = GLProfile.getDefault();
-			GLCapabilities glcapabilities = new GLCapabilities(glprofile);
-			glPanel = new OpenGlPanel(glcapabilities);
+			glPanel = new OpenGlPanel(new GLCapabilities(GLProfile.getDefault()));
 		}
 		return glPanel;
 	}
 
 	JPanel getMainPanel() {
-		if (contetnPanel == null) {
-			contetnPanel = new JPanel();
-			contetnPanel.setLayout(new BorderLayout());
-			contetnPanel.add(getSubPanel(), BorderLayout.CENTER);
-			contetnPanel.add(getHeaderPanel(), BorderLayout.NORTH);
+		if (mainPanel == null) {
+			mainPanel = new JPanel();
+			mainPanel.setLayout(new BorderLayout());
+			mainPanel.add(getSubPanel(), BorderLayout.CENTER);
+			mainPanel.add(getHeaderPanel(), BorderLayout.NORTH);
 		}
-		return contetnPanel;
+		return mainPanel;
 	}
 
 	JMenuItem getMenuItemNeu() {
@@ -191,19 +191,47 @@ public class MainFrame extends JFrame implements ModulViewPanelIF<MainFrameContr
 	JPanel getHeaderPanel() {
 		if (panelHeader == null) {
 			panelHeader = new JPanel();
-//			panelHeader.setLayout(new BorderLayout());
-			Box line1 = Box.createHorizontalBox();
-			line1.add(getLabelHeight());
-			line1.add(getSliderHeight());
-			line1.add(getLabelMode());
-			line1.add(getComboBoxDrawingMode());
-			Box line2 = Box.createHorizontalBox();
-			line2.add(getLabelDetail());
-			line2.add(getSliderDetail());
-			Box lines = Box.createVerticalBox();
-			lines.add(line1);
-			lines.add(line2);
-			panelHeader.add(lines);
+			panelHeader.setLayout(new GridBagLayout());
+
+			GridBagConstraints gbcLabelHeight = new GridBagConstraints();
+			gbcLabelHeight.gridx = 0;
+			gbcLabelHeight.gridy = 0;
+			gbcLabelHeight.insets = new Insets(0, 0, 0, 0);
+			gbcLabelHeight.anchor = GridBagConstraints.WEST;
+			panelHeader.add(getLabelHeight(), gbcLabelHeight);
+
+			GridBagConstraints gbcSliderHeight = new GridBagConstraints();
+			gbcSliderHeight.gridx = 1;
+			gbcSliderHeight.gridy = 0;
+			gbcSliderHeight.insets = new Insets(0, 5, 0, 0);
+			panelHeader.add(getSliderHeight(), gbcSliderHeight);
+
+			GridBagConstraints gbcLabelMode = new GridBagConstraints();
+			gbcLabelMode.gridx = 2;
+			gbcLabelMode.gridy = 0;
+			gbcLabelMode.insets = new Insets(0, 10, 0, 0);
+			panelHeader.add(getLabelMode(), gbcLabelMode);
+
+			GridBagConstraints gbcComboBox = new GridBagConstraints();
+			gbcComboBox.gridx = 3;
+			gbcComboBox.gridy = 0;
+			gbcComboBox.insets = new Insets(0, 5, 0, 0);
+			panelHeader.add(getComboBoxDrawingMode(), gbcComboBox);
+
+			GridBagConstraints gbcLabelDetail = new GridBagConstraints();
+			gbcLabelDetail.gridx = 0;
+			gbcLabelDetail.gridy = 1;
+			gbcLabelDetail.insets = new Insets(10, 0, 0, 0);
+			gbcLabelDetail.anchor = GridBagConstraints.WEST;
+			panelHeader.add(getLabelDetail(), gbcLabelDetail);
+
+			GridBagConstraints gbcSliderDetail = new GridBagConstraints();
+			gbcSliderDetail.gridx = 1;
+			gbcSliderDetail.gridy = 1;
+			gbcSliderDetail.insets = new Insets(10, 5, 0, 0);
+			gbcSliderDetail.fill = GridBagConstraints.HORIZONTAL;
+			gbcSliderDetail.gridwidth = 3;
+			panelHeader.add(getSliderDetail(), gbcSliderDetail);
 		}
 		return panelHeader;
 	}
